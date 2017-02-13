@@ -1,7 +1,7 @@
 
 angular.module("newsApp").controller('newsCtrl', function($scope, dataService){
 	
-	
+	$scope.newsSelected=false;
 
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
@@ -24,7 +24,23 @@ angular.module("newsApp").controller('newsCtrl', function($scope, dataService){
  	}
 
  	$scope.saveNews = function(){
- 		
+ 		for(var prop in $scope.editedNews) {
+ 			$scope.originalNews[prop]=$scope.editedNews[prop];
+ 			$scope.editing=false;
+ 			$scope.preview=false;
+ 		}
+ 	}
+
+ 	$scope.viewNews= function(news,$index){
+ 		$scope.newsSelected = true;
+ 		$scope.news= $scope.newsArray[$index];
+ 	}
+
+ 	$scope.editNews= function(news, $index){
+ 		$scope.editing =true;
+ 		$scope.originalNews = $scope.newsArray[$index];
+ 		$scope.editedNews =  Object.assign({}, $scope.originalNews);
+
  	}
 
  });

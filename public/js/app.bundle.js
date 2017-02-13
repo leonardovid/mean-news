@@ -8,6 +8,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope){
 	
 	$scope.template =
 	    { news: 'templates/news.html',
+	      editNews: 'templates/editNews.html',
 		  partials:{header:'templates/partials/header.html',
 				  footer:'templates/partials/footer.html'},
 		  user:'templates/user.html',
@@ -15,7 +16,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope){
 		  admin:'templates/admin.html',
 		};
 
-	$scope.currentTemplate = $scope.template.news;
+	$scope.currentTemplate = $scope.template.author;
 
 	$scope.changeCurrent = function(template){
 		$scope.currentTemplate= $scope.template[template];
@@ -32,7 +33,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope){
 
 angular.module("newsApp").controller('newsCtrl', function($scope, dataService){
 	
-	
+	$scope.newsSelected=false;
 
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
@@ -55,7 +56,23 @@ angular.module("newsApp").controller('newsCtrl', function($scope, dataService){
  	}
 
  	$scope.saveNews = function(){
- 		
+ 		for(var prop in $scope.editedNews) {
+ 			$scope.originalNews[prop]=$scope.editedNews[prop];
+ 			$scope.editing=false;
+ 			$scope.preview=false;
+ 		}
+ 	}
+
+ 	$scope.viewNews= function(news,$index){
+ 		$scope.newsSelected = true;
+ 		$scope.news= $scope.newsArray[$index];
+ 	}
+
+ 	$scope.editNews= function(news, $index){
+ 		$scope.editing =true;
+ 		$scope.originalNews = $scope.newsArray[$index];
+ 		$scope.editedNews =  Object.assign({}, $scope.originalNews);
+
  	}
 
  });
@@ -89,6 +106,7 @@ angular.module("newsApp").service('dataService',  function($http){
 
 
 var angular = __webpack_require__(0);
+
 
 angular.module("newsApp", []);
 

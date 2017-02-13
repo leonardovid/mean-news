@@ -1,0 +1,26 @@
+<div ng-controller="newsCtrl">
+
+	<div ng-repeat="news in newsArray track by $index" ng-hide="editing">
+	  <div ng-click="viewNews($index)">
+	  		  <h3 >{{news.title}}</h3>			  
+			  <h4 >{{news.subtitle}}</h4>
+			  <a href="" ng-click="editNews(news, $index)">EDITAR</a>
+	  </div>
+	</div>
+	<div ng-show="editing">
+		<div id="edit-news" ng-hide="preview">
+			<h1><input  ng-model="editedNews.title" ng-hide="preview" 	type="text"  placeholder={{editedNews.title}}></h1>
+			<h3><input  ng-model="editedNews.subtitle" ng-hide="preview" type="text" placeholder={{editedNews.subtitle}} ></h3>
+			<p><textarea cols="30" rows="10"   ng-model="editedNews.content" ng-hide="preview" type="text" placeholder={{editedNews.content}} ></textarea></p>
+		</div>
+		<div ng-show="preview">
+			<h1>{{editedNews.title}}</h1>
+			<h3>{{editedNews.subtitle}}</h3>
+			<p>{{editedNews.content}}</p>
+		</div>
+			<a href="" ng-hide="preview" ng-click="editing=false">Volver</a>
+			<a href="" ng-show="preview" ng-click="preview=false">Volver</a>
+			<a href="" ng-click="preview=true">Previsualizar</a>
+			<a href="" ng-click="saveNews()">Guardar</a>	
+	</div>
+</div>
