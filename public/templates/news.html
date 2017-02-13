@@ -1,1 +1,14 @@
-<h1>news</h1>
+<div ng-controller="newsCtrl">
+	<div >
+		<a href=""><h1 ng-click="addNews()" >+</h1></a>
+	</div>
+	<div ng-repeat="new in newsArray track by $index">
+	  <h3 ng-hide="editing">{{new.title}}</h3>
+	  <input ng-show="editing" ng-model="new.title" type="text"  placeholder="new.title" >
+	  <h4 ng-hide="editing" >{{new.subtitle}}</h4>
+	  <input ng-show="editing" ng-model="new.subtitle" type="text" placeholder="new.subtitle" >
+	  <button ng-click="editing = false">Guardar</button>
+	  <button ng-click="editing = true">Editar</button>
+	  <button ng-click="deleteNews(news,$index)" >Eliminar</button>
+	</div>
+</div>
