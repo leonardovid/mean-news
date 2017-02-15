@@ -1,4 +1,8 @@
 <div  class="header">
-	<div class="logo">Noti Mean</div>
-	<div class="login"><a href="" ng-click="changeCurrent('news')">Ingresa</a></div>
+	<div class="logo" ng-click="changeCurrentTemplate('news')">Noti Mean</div>
+	<div class="login">
+		<a href="" ng-if="userLogued==null" ng-click="changeCurrentTemplate('auth')">Ingresa</a>
+		<a href="" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('panel')">{{userLogued.name}}</a>
+		<a href="" ng-if="userLogued!=null" ng-click="logoutUser()">Salir</a>
+	</div>
 </div>

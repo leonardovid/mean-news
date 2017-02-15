@@ -1,19 +1,17 @@
 <div ng-controller="newsCtrl">
 
-	<div ng-repeat="news in newsArray track by $index" ng-hide="newsSelected">
-	  <a href="">
+	<div ng-repeat="news in newsArray track by $index" ng-hide="selected">
 	  <div ng-click="viewNews(news, $index)">
 	  		  <h3 >{{news.title}}</h3>  
 			  <h4 >{{news.subtitle}}</h4>
 	  </div>
-	  </a>
 	</div>
-	<div ng-show="newsSelected">
+	<div ng-show="selected">
 		<div id="news-view">
 			<h1>{{news.title}}</h1>
 			<h3>{{news.subtitle}}</h3>
 			<p>{{news.content}}</p>
-			<a href="" ng-click="newsSelected=false">Volver</a>
+			<a href="" ng-click="selected=false">Volver</a>
 		</div>
 	</div>
 </div>

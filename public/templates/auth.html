@@ -1,0 +1,21 @@
+<div class="login">
+	<div ng-hide="registration">
+		<form >
+			<input type="text" placeholder="Nombre de Usuario">
+			<input type="password" placeholder="Contraseña">
+			<button >Ingresar</button>
+			<a href="" ng-click="registration=true" >Registrarse</a>
+		</form>
+	</div>
+	<div ng-show="registration">
+		<form action="POST" >
+			<input type="text" placeholder="Nombre de Usuario">
+			<input type="password" placeholder="Contraseña">
+			<input type="password" placeholder="Repetir contraseña">
+			<input type="email" placeholder="Correo Electronico">
+			<button type="submit">Registrarse</button>
+			
+		</form>
+	</div>
+	<a href="" ng-click="changeCurrentTemplate('news'); ">Home</a>
+</div>
