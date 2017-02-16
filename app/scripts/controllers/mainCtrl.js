@@ -120,7 +120,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 
 	authService.getUsers(function(res){
 			$scope.users=res.data;
-			$scope.userLogued = $scope.users[0];
+			$scope.userLogued = $scope.users[2];
 	});	
 
 	$scope.logoutUser = function (){

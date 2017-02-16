@@ -1,6 +1,8 @@
 webpackJsonp([0],[
 /* 0 */,
-/* 1 */
+/* 1 */,
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports) {
 
 
@@ -125,7 +127,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 
 	authService.getUsers(function(res){
 			$scope.users=res.data;
-			$scope.userLogued = $scope.users[0];
+			$scope.userLogued = $scope.users[2];
 	});	
 
 	$scope.logoutUser = function (){
@@ -151,7 +153,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 });
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").directive('ngUserMenu', function() {
@@ -176,7 +178,7 @@ angular.module("newsApp").directive('ngAdminMenu', function() {
 });
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('authService',  function($http){
@@ -196,7 +198,7 @@ angular.module("newsApp").service('authService',  function($http){
 });
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('dataService',  function($http){
@@ -216,22 +218,55 @@ angular.module("newsApp").service('dataService',  function($http){
 });
 
 /***/ }),
-/* 5 */,
-/* 6 */
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(0);
+__webpack_require__(2);
+__webpack_require__(22);
+__webpack_require__(21);
+
+/***/ }),
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var angular = __webpack_require__(0);
+__webpack_require__(7);
 
-
+var angular = __webpack_require__(1);
 angular.module("newsApp", []);
 
-__webpack_require__(1);
-__webpack_require__(2);
-__webpack_require__(4);
 __webpack_require__(3);
+__webpack_require__(4);
+__webpack_require__(6);
+__webpack_require__(5);
 
 
 
@@ -239,5 +274,5 @@ __webpack_require__(3);
 
 
 /***/ })
-],[6]);
+],[23]);
 //# sourceMappingURL=app.bundle.js.map

@@ -1,8 +1,8 @@
-<div  class="header">
+<div id="navbar" >
 	<div class="logo" ng-click="changeCurrentTemplate('news')">Noti Mean</div>
 	<div class="login">
 		<a href="" ng-if="userLogued==null" ng-click="changeCurrentTemplate('auth')">Ingresa</a>
 		<a href="" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('panel')">{{userLogued.name}}</a>
-		<a href="/" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('news');logoutUser()">Salir</a>
+		<a href="/" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('news');logoutUser()" ><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
 	</div>
 </div>

@@ -9,10 +9,16 @@
   "author": "Leonardo Vidal",
   "license": "ISC",
   "devDependencies": {
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "file-loader": "^0.10.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^2.2.1"
   },
   "dependencies": {
     "angular": "^1.6.2",
-    "mootools": "^1.5.2"
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1"
   }
 }

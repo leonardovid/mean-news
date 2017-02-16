@@ -1,19 +1,32 @@
-var webpack = require('webpack'),
-       path = require('path');
+var webpack = require('webpack');
+var path = require('path');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     context: __dirname + '/app',
     devtool: 'source-map',
     entry: {
         app: './app.js',
-        vendor: ['angular']  
+        vendor: ['angular','jquery','bootstrap']  
     },
     output: {
         path: __dirname + '/public/js',
         filename: 'app.bundle.js'
     },
+    module: {
+        
+        rules: [
+            { test: /\.css$/,use: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader" })},
+            { test:/\.(eot|svg|ttf|woff|woff2)$/,
+                use: "file-loader?name=../css/[name].[ext]" }
+        ]
+
+    },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({ name:"vendor", filename:"vendor.bundle.js"})
+        new webpack.optimize.CommonsChunkPlugin({ name:"vendor", filename:"vendor.bundle.js"}),
+        new webpack.ProvidePlugin({$: "jquery",jQuery: "jquery"}),
+        new ExtractTextPlugin("../css/bundle.css")
+
     ],
     watch:true
 };

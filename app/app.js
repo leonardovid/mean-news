@@ -1,8 +1,8 @@
 'use strict';
 
+require('./vendor.js');
+
 var angular = require('angular');
-
-
 angular.module("newsApp", []);
 
 require('./scripts/controllers/mainCtrl.js');
