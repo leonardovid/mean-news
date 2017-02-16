@@ -1,6 +1,0 @@
-<div >
-	<div ng-repeat="user in users track by $index" >
-		<div ng-if="user.type=='user'"><p>{{user.name}} {{user.lastname}}</p><a href=""  ng-click="changeUserType(user)">Convertir en Autor</a></div>
-		<div ng-if="user.type=='author'"><p>{{user.name}} {{user.lastname}}</p><a href=""  ng-click="changeUserType(user)">Convertir en Usuario</a></div>
-	</div>
-</div>

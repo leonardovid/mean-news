@@ -3,6 +3,6 @@
 	<div class="login">
 		<a href="" ng-if="userLogued==null" ng-click="changeCurrentTemplate('auth')">Ingresa</a>
 		<a href="" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('panel')">{{userLogued.name}}</a>
-		<a href="" ng-if="userLogued!=null" ng-click="logoutUser()">Salir</a>
+		<a href="/" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('news');logoutUser()">Salir</a>
 	</div>
 </div>
