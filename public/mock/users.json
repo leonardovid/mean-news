@@ -3,7 +3,10 @@
 	"password":"12345678",
 	"name":"Usuario",
 	"lastname":"Comun",
-	"type":"user"
+	"type":"user",
+	"subscriptions":{"economy":true,
+					"international":true}
+				
 	},
 
 

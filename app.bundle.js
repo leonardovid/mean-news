@@ -1,3 +1,10 @@
+webpackJsonp([0],[
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports) {
+
 
 angular.module("newsApp").controller('mainCtrl', function($scope, authService,dataService){
 	
@@ -11,8 +18,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 		  panel:'templates/panel.html',
 		  panelPartials:{
 		  	manageNews:'templates/control-panel/manageNews.html',
-		  	manageUsers: 'templates/control-panel/manageUsers.html',
-		  	manageSubscriptions:'templates/control-panel/manageSubscriptions.html'
+		  	manageUsers: 'templates/control-panel/manageUsers.html'
 		  }
 	};
 
@@ -100,9 +106,6 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 		if (from == 'editing') {
 			$scope.showListNewsToEdit();
 		}
-		if (from== 'view') {
-			$scope.selected=false;
-		}
 
 	}
 
@@ -124,7 +127,7 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 
 	authService.getUsers(function(res){
 			$scope.users=res.data;
-			$scope.userLogued = $scope.users[1];
+			$scope.userLogued = $scope.users[2];
 	});	
 
 	$scope.logoutUser = function (){
@@ -145,12 +148,132 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 
 	}
 
-	/*Subscripciones*/
-
-	
-
-
-
 	
 	
 });
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").directive('ngUserMenu', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/control-panel/user.html'
+  }
+});
+
+angular.module("newsApp").directive('ngAuthorMenu', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/control-panel/author.html'
+  }
+});
+
+angular.module("newsApp").directive('ngAdminMenu', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/control-panel/admin.html'
+  }
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").service('authService',  function($http){
+	
+	this.getUsers = function(callback){
+		$http.get('mock/users.json')
+		.then(callback);
+	};
+	
+	this.deleteUser = function(news){
+
+	}
+
+	this.saveUser = function(){
+
+	}
+});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").service('dataService',  function($http){
+	
+	this.getNews = function(callback){
+		$http.get('mock/news.json')
+		.then(callback);
+	};
+	
+	this.deleteNews = function(news){
+
+	}
+
+	this.saveNews = function(){
+
+	}
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(0);
+__webpack_require__(2);
+__webpack_require__(22);
+__webpack_require__(21);
+
+/***/ }),
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(21);
+__webpack_require__(7);
+
+var angular = __webpack_require__(1);
+angular.module("newsApp", []);
+
+__webpack_require__(3);
+__webpack_require__(4);
+__webpack_require__(6);
+__webpack_require__(5);
+
+
+
+
+
+
+/***/ })
+],[23]);
+//# sourceMappingURL=app.bundle.js.map

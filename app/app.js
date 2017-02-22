@@ -1,9 +1,10 @@
 'use strict';
 
-require('./vendor.js');
+require('./requires.js');
 
 var angular = require('angular');
-angular.module("newsApp", []);
+
+angular.module("newsApp",['textAngular']);
 
 require('./scripts/controllers/mainCtrl.js');
 require('./scripts/directives/ngMenus.js');

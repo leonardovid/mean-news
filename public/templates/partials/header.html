@@ -1,8 +1,19 @@
-<div id="navbar" >
-	<div class="logo" ng-click="changeCurrentTemplate('news')">Noti Mean</div>
-	<div class="login">
-		<a href="" ng-if="userLogued==null" ng-click="changeCurrentTemplate('auth')">Ingresa</a>
-		<a href="" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('panel')">{{userLogued.name}}</a>
-		<a href="/" ng-if="userLogued!=null" ng-click="changeCurrentTemplate('news');logoutUser()" ><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div id="logo" class="navbar-brand" ng-click="goBackFrom('view');changeCurrentTemplate('news')">Noticias Mean</div>
+		
+			<div ng-if="userLogued==null">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a id="login" href=""  ng-click="changeCurrentTemplate('auth')"><p class="linkText">Ingresar</p></a></li>
+					<li><a href="" ng-click="changeCurrentTemplate('auth')"><span id="user" class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
+				</ul>
+			</div>
+			<div ng-if="userLogued!=null">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a id="userPanel" href=""  ng-click="changeCurrentTemplate('panel')"><p class="linkText"> {{userLogued.name}}</p></a></li>
+					<li><a href="/"  ng-click="changeCurrentTemplate('news');logoutUser()" ><span id="logout" class="glyphicon glyphicon-off" aria-hidden="true"></span></a></li>
+				</ul>
+			</div>		
 	</div>
-</div>
+</nav>
+

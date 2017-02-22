@@ -1,10 +1,14 @@
-<div >
-	<div ng-repeat="user in users track by $index" >
-		<div ng-if="user.type=='user'"><p>{{user.name}} {{user.lastname}} </p>
-		<p>{{user.type}}</p>
-		<a href=""  ng-click="changeUserType(user,'promote')">Convertir en Autor</a></div>
-		<div ng-if="user.type=='author'"><p>{{user.name}} {{user.lastname}}</p>
-		<p>{{user.type}}</p>
-		<a href=""  ng-click="changeUserType(user,'demote')">Convertir en Usuario</a></div>
+<div class="panel panel-primary" >
+	<div ng-repeat="user in users track by $index" class="panel-body" >
+		<div class="row">
+		    <div  ng-if="user.type=='author'||user.type=='user' "class="col-md-8"><h4 >{{user.name}} {{user.lastname}}</h4></div>
+		    <div  ng-if="user.type=='user'" class="col-md-4 text-right">
+		    	<button class="btn btn-primary"  ng-click="changeUserType(user,'promote')">Convertir en Autor</button>
+		    </div>
+		    <div  ng-if="user.type=='author'" class="col-md-4 text-right">
+		    	<button class="btn btn-primary"  ng-click="changeUserType(user,'demote')">Convertir en Usuario</button>
+		    </div>
+		</div>
 	</div>
 </div>
+

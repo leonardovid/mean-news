@@ -7,7 +7,7 @@ module.exports = {
     devtool: 'source-map',
     entry: {
         app: './app.js',
-        vendor: ['angular','jquery','bootstrap']  
+        vendor: ['angular','jquery','bootstrap','textangular']  
     },
     output: {
         path: __dirname + '/public/js',
@@ -18,7 +18,7 @@ module.exports = {
         rules: [
             { test: /\.css$/,use: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader" })},
             { test:/\.(eot|svg|ttf|woff|woff2)$/,
-                use: "file-loader?name=../css/[name].[ext]" }
+                use: "file-loader?name=../fonts/[name].[ext]" }
         ]
 
     },

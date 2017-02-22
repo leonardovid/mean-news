@@ -1,28 +1,43 @@
-<div ng-show="listNews">
-	<div ng-repeat="news in newsArray track by $index"  >
-	  	<div ng-click="viewNews($index)">
-	  		<h3 >{{news.title}}</h3>			  
-			<h4 >{{news.subtitle}}</h4>
-			<a href="" ng-click="editSelectedNews(news, $index)">EDITAR</a>
-	  	</div>
+
+<div ng-show="listNews" class="panel panel-primary">
+	<div ng-repeat="news in newsArray track by $index" class="panel-body" >
+	  	
+		  	<div ng-click="viewNews($index)">				  
+				<div class="row ">
+				        <div class="col-md-8"><h4 >{{news.title}}</h4></div>
+				        <div class="col-md-4 text-right"><button href="" ng-click="editSelectedNews(news, $index)" class="btn btn-primary">Editar</button></div>
+				</div>
+		  	</div>
+	  	
 	</div>
-	
 </div>
-<div ng-show="editing">
-	<div id="edit-news" ng-hide="preview">
+<div ng-show="editing" class="panel panel-primary">
+	<div id="edit-news" ng-hide="preview" class="panel-body">
+		<input type="file" name="pic" accept="image/*">
 		<h1><input  ng-model="selectedNews.title" ng-hide="preview" 	type="text"  placeholder={{selectedNews.title}}></h1>
 		<h3><input  ng-model="selectedNews.subtitle" ng-hide="preview" type="text" placeholder={{selectedNews.subtitle}} ></h3>
-		<input type="file" name="pic" accept="image/*">
-		<p><textarea cols="30" rows="10"   ng-model="selectedNews.content" ng-hide="preview" type="text" placeholder={{selectedNews.content}} ></textarea></p>
+		
+		
+		<div text-angular ng-model="selectedNews.content"></div>
 	</div>
-	<div ng-show="preview" class="news-view">
-		<h1>{{selectedNews.title}}</h1>
+	<div ng-show="preview" class="news-view panel-body" >
+		<div class="text-center">
+				<img src="./img/place.png" class="img-rounded">
+		</div>
+		<h1>{{selectedNews.title}}</h1>	
 		<h3>{{selectedNews.subtitle}}</h3>
-		<p>{{selectedNews.content}}</p>
+		<div ng-bind-html= "selectedNews.content" ></div> 
 	</div>
-		<a href="" ng-show="preview" ng-click="goBackFrom('preview')">Volver</a>
-		<a href="" ng-hide="preview" ng-click="goBackFrom('editing')">Volver</a>
-		<a href="" ng-hide="preview" ng-click="previewNews()">Previsualizar</a>
-		<a href="" ng-hide="create" ng-click="saveEditedNews()">Guardar</a>
-		<a href="" ng-show="create" ng-click="addNews(selectedNews)">Guardar</a>	
+		<div class="navLinks text-center">
+			<a href="" ng-show="preview" ng-click="goBackFrom('preview')">Volver</a>
+			<a href="" ng-hide="preview" ng-click="goBackFrom('editing')">Volver</a>
+			<a href="" ng-hide="preview" ng-click="previewNews()">Previsualizar</a>
+			<a href="" ng-hide="create" ng-click="saveEditedNews()">Guardar</a>
+			<a href="" ng-show="create" ng-click="addNews(selectedNews)">Guardar</a>
+		</div>	
 </div>
+
+
+
+
+
