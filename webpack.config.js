@@ -7,7 +7,7 @@ module.exports = {
     devtool: 'source-map',
     entry: {
         app: './app.js',
-        vendor: ['angular','jquery','bootstrap','textangular']  
+        vendor: ['angular','jquery','bootstrap','textangular','angular-route']  
     },
     output: {
         path: __dirname + '/public/js',

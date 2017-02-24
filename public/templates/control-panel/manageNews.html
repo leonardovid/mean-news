@@ -1,43 +1,67 @@
+<div ng-controller="newsCtrl">
+	
+	<div class="btn-group-mg  options" >
+		<button type="button" class="btn btn-primary col-md-6" ng-click="showCreateNews()">Publicar una noticia</button>
+		<button type="button" class="btn btn-primary col-md-6" ng-click="showListNewsToEdit()">Editar una noticia</button>
+	</div>
+	<div></div>
 
-<div ng-show="listNews" class="panel panel-primary">
-	<div ng-repeat="news in newsArray track by $index" class="panel-body" >
-	  	
-		  	<div ng-click="viewNews($index)">				  
-				<div class="row ">
-				        <div class="col-md-8"><h4 >{{news.title}}</h4></div>
-				        <div class="col-md-4 text-right"><button href="" ng-click="editSelectedNews(news, $index)" class="btn btn-primary">Editar</button></div>
-				</div>
-		  	</div>
-	  	
+	<div ng-show="listNews" class="panel panel-primary" >
+		<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Autor</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="news in newsArray track by $index"">
+        <td>{{news.title}}</td>
+        <td>{{news.author}}</td>
+        <td >
+        	<div class="text-right">
+        		<button href="" ng-click="editSelectedNews(news, $index)" class="btn btn-primary">Editar</button>
+        	</div>
+		</td>
+      </tr>
+    </tbody>
+</table>
 	</div>
-</div>
-<div ng-show="editing" class="panel panel-primary">
-	<div id="edit-news" ng-hide="preview" class="panel-body">
-		<input type="file" name="pic" accept="image/*">
-		<h1><input  ng-model="selectedNews.title" ng-hide="preview" 	type="text"  placeholder={{selectedNews.title}}></h1>
-		<h3><input  ng-model="selectedNews.subtitle" ng-hide="preview" type="text" placeholder={{selectedNews.subtitle}} ></h3>
-		
-		
-		<div text-angular ng-model="selectedNews.content"></div>
-	</div>
-	<div ng-show="preview" class="news-view panel-body" >
-		<div class="text-center">
-				<img src="./img/place.png" class="img-rounded">
+
+
+	<div ng-show="editing" class="panel panel-primary">
+		<div id="edit-news" ng-hide="preview" class="panel-body">
+			<input type="file" name="pic" accept="image/*">
+			<h1><input  ng-model="selectedNews.title" ng-hide="preview" 	type="text"  placeholder={{selectedNews.title}}></h1>
+			<h3><input  ng-model="selectedNews.subtitle" ng-hide="preview" type="text" placeholder={{selectedNews.subtitle}} ></h3>
+			
+			
+			<div text-angular ng-model="selectedNews.content"></div>
 		</div>
-		<h1>{{selectedNews.title}}</h1>	
-		<h3>{{selectedNews.subtitle}}</h3>
-		<div ng-bind-html= "selectedNews.content" ></div> 
+
+
+		<div ng-show="preview" class="news-view panel-body" >
+			<div class="text-center">
+					<img src="./img/place.png" class="img-rounded">
+			</div>
+			<h1>{{selectedNews.title}}</h1>	
+			<h3>{{selectedNews.subtitle}}</h3>
+			<div ng-bind-html= "selectedNews.content" ></div> 
+		</div>
+			<div class="navLinks text-center">
+				<a href="" ng-show="preview" ng-click="goBackFrom('preview')">Volver</a>
+				<a href="" ng-hide="preview" ng-click="goBackFrom('editing')">Volver</a>
+				<a href="" ng-hide="preview" ng-click="previewNews()">Previsualizar</a>
+				<a href="" ng-hide="create" ng-click="saveEditedNews()">Guardar</a>
+				<a href="" ng-show="create" ng-click="addNews(selectedNews)">Guardar</a>
+			</div>	
 	</div>
-		<div class="navLinks text-center">
-			<a href="" ng-show="preview" ng-click="goBackFrom('preview')">Volver</a>
-			<a href="" ng-hide="preview" ng-click="goBackFrom('editing')">Volver</a>
-			<a href="" ng-hide="preview" ng-click="previewNews()">Previsualizar</a>
-			<a href="" ng-hide="create" ng-click="saveEditedNews()">Guardar</a>
-			<a href="" ng-show="create" ng-click="addNews(selectedNews)">Guardar</a>
-		</div>	
 </div>
 
 
 
 
 
+
+  	

@@ -1,7 +1,7 @@
 angular.module("newsApp").service('dataService',  function($http){
 	
 	this.getNews = function(callback){
-		$http.get('mock/news.json')
+		$http.get('/api/news')
 		.then(callback);
 	};
 	
@@ -10,6 +10,19 @@ angular.module("newsApp").service('dataService',  function($http){
 	}
 
 	this.saveNews = function(){
+
+	}
+
+	this.getUsers = function(callback){
+		$http.get('/api/users')
+		.then(callback);
+	};
+	
+	this.deleteUser = function(news){
+
+	}
+
+	this.saveUser = function(){
 
 	}
 });

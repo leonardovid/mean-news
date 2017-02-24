@@ -24,10 +24,9 @@ body {
 	margin-right: 30%;
 }
 
-.whiteBlock{
-	background-color: white;
+.none-decoration a,.none-decoration a:hover,.none-decoration a:visited{
+	text-decoration: none;
 }
-
 /*Navbar*/
 
 #logo{
@@ -115,6 +114,15 @@ body {
 	font-size: 20px;
 	margin:5px;
 }
+.options {
+
+	display: block;
+}
+
+.options button{
+
+	margin-bottom: 30px;
+}
 
 /*Footer*/
 
@@ -141,7 +149,7 @@ body {
 }
 
 .socialIcons a,.socialIcons a:hover,.socialIcons a:visited{
-	text-decoration: none;
+	
 	color: #7f8c8d;
 }
 

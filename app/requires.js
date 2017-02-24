@@ -1,3 +1,6 @@
+/*Ng Route*/
+require('angular-route');
+
 /*Bootstrap*/
 require('jquery');
 require('bootstrap');

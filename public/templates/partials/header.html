@@ -1,17 +1,17 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-	<div class="container">
-		<div id="logo" class="navbar-brand" ng-click="goBackFrom('view');changeCurrentTemplate('news')">Noticias Mean</div>
+	<div class="container" ng-controller="authCtrl">
+		<a href="/"><div id="logo" class="navbar-brand" ">Noticias Mean</div></a>
 		
 			<div ng-if="userLogued==null">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a id="login" href=""  ng-click="changeCurrentTemplate('auth')"><p class="linkText">Ingresar</p></a></li>
-					<li><a href="" ng-click="changeCurrentTemplate('auth')"><span id="user" class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
+					<li><a id="login" href="/auth"  ><p class="linkText">Ingresar</p></a></li>
+					<li><a href="/auth" ><span id="user" class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
 				</ul>
 			</div>
 			<div ng-if="userLogued!=null">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a id="userPanel" href=""  ng-click="changeCurrentTemplate('panel')"><p class="linkText"> {{userLogued.name}}</p></a></li>
-					<li><a href="/"  ng-click="changeCurrentTemplate('news');logoutUser()" ><span id="logout" class="glyphicon glyphicon-off" aria-hidden="true"></span></a></li>
+					<li><a id="userPanel" href="/panel"  ><p class="linkText"> {{userLogued.name}}</p></a></li>
+					<li><a href="/"  ng-click="logoutUser()" ><span id="logout" class="glyphicon glyphicon-off" aria-hidden="true"></span></a></li>
 				</ul>
 			</div>		
 	</div>

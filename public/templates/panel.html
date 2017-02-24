@@ -1,11 +1,11 @@
-<h3>Bienvenido {{userLogued.name}} {{userLogued.lastname}}</h3>
+<div ng-controller="authCtrl">
+	<h3>Bienvenido {{userLogued.name}} {{userLogued.lastname}}</h3>
+	<div class="menu pull-left">
+		<div ng-if="userLogued.type=='user'" ng-user-menu></div>
+		<div ng-if="userLogued.type=='author' || userLogued.type=='admin'" ng-author-menu></div>
+		<div ng-if="userLogued.type=='admin'" ng-admin-menu></div>
+	</div>
+</div>
+<div ng-include="activePanel" class="actions pull-right"></div>
 
-<div class="menu pull-left">
-	<div ng-if="userLogued.type=='user'" ng-user-menu></div>
-	<div ng-if="userLogued.type=='author' || userLogued.type=='admin'" ng-author-menu></div>
-	<div ng-if="userLogued.type=='admin'" ng-admin-menu></div>
-</div>
-<div ng-include="activePanel" class="actions pull-right">
-	
-</div>
 

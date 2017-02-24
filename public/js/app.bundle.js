@@ -4,63 +4,78 @@ webpackJsonp([0],[
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*Bootstrap*/
-__webpack_require__(0);
-__webpack_require__(3);
-__webpack_require__(26);
-
-/*Text Angular*/
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-
-/*Font Awesome*/
-__webpack_require__(24);
-
-/*CSS*/
-__webpack_require__(25);
-
-/***/ }),
+/* 5 */,
 /* 6 */
 /***/ (function(module, exports) {
 
+angular.module("newsApp").config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
+		$routeProvider.when('/', {templateUrl: 'templates/listNews.html', controller:'newsCtrl'});
+		$routeProvider.when('/auth', {templateUrl: 'templates/auth.html'});
+		$routeProvider.when('/panel', {templateUrl: 'templates/panel.html',controller:'panelCtrl'});
+		$routeProvider.when('/news:id', {templateUrl: './templates/viewNews.html',controller:'newsCtrl'});
+		$routeProvider.otherwise({redirectTo: '/'});
 
-angular.module("newsApp").controller('mainCtrl', function($scope, authService,dataService){
+		$locationProvider.html5Mode({enabled: true, requireBase: false});
+
+}]);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*Ng Route*/
+__webpack_require__(3);
+
+/*Bootstrap*/
+__webpack_require__(0);
+__webpack_require__(4);
+__webpack_require__(32);
+
+/*Text Angular*/
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+
+/*Font Awesome*/
+__webpack_require__(30);
+
+/*CSS*/
+__webpack_require__(31);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").controller('authCtrl', function($scope,$interval ,authService){
 	
-	$scope.template =
-	    { news: 'templates/news.html',
-	      auth:'templates/auth.html',
-		  partials:{
-		  	header:'templates/partials/header.html',
-			footer:'templates/partials/footer.html'
-		  },		  
-		  panel:'templates/panel.html',
-		  panelPartials:{
-		  	manageNews:'templates/control-panel/manageNews.html',
-		  	manageUsers: 'templates/control-panel/manageUsers.html',
-		  	manageSubscriptions:'templates/control-panel/manageSubscriptions.html'
-		  }
-	};
+	
+	$scope.userLogued = authService.logued();
 
-	$scope.currentTemplate= $scope.template.news; 
-
-	$scope.changeCurrentTemplate = function(page){
-		$scope.currentTemplate= $scope.template[page];
-		
+	$scope.logoutUser = function (){
+		$scope.userLogued=null;
 	}
 
 	
+	
+	
+});
 
-	/*Noticias*/
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
 
-	$scope.newsSelected=false;
+angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams ,dataService){
+
+
 
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
+			id = $routeParams.id;
+			if (id!=null) {
+	 			$scope.news= $scope.newsArray[id];
+	 			}
 		});
+
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -109,10 +124,6 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
  		}
  	}
 
- 	$scope.viewNews= function(news,$index){
- 		$scope.selected = true;
- 		$scope.news= $scope.newsArray[$index];
- 	}
 
  	$scope.editSelectedNews= function(news, $index){
  		$scope.showNewsToEdit();
@@ -134,31 +145,50 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 		}
 
 	}
+});
 
-	$scope.changePanel= function(panel,option){
-		$scope.activePanel = $scope.template.panelPartials[panel];
-		if(option == 'create' ){
-			$scope.showCreateNews();
-		}
-		if (option == 'edit') {
-			$scope.showListNewsToEdit();
-		}
-		if (option== 'user') {
-			$scope.manageUsers=true;
-		}
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").controller('panelCtrl', function($scope){	
+	
+	$scope.template =
+	    {manageNews:'templates/control-panel/manageNews.html',
+	  	manageUsers: 'templates/control-panel/manageUsers.html',
+	  	manageSubscriptions:'templates/control-panel/manageSubscriptions.html'  
+	};
+
+
+
+
+	$scope.changePanel= function(panel){
+		$scope.activePanel = $scope.template[panel];
+		
 		
 	}
+});
 
-	/*Usuarios*/
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
 
-	authService.getUsers(function(res){
-			$scope.users=res.data;
-			$scope.userLogued = $scope.users[1];
-	});	
+angular.module("newsApp").controller('usersCtrl', function($scope, authService,dataService){
 
-	$scope.logoutUser = function (){
-		$scope.userLogued=null;
-	}
+    dataService.getUsers(function(res){
+		var users = res.data;
+		var fileteredUsers=[];
+		for (var i = 0; i < users.length; i++) {
+			if (users[i].type=='user'||users[i].type=='author') {
+				fileteredUsers.push(users[i]);
+			}
+		}
+		$scope.users= fileteredUsers;
+	});
+
+
+
+	
 
 	$scope.createUser= function(){}
 
@@ -173,19 +203,10 @@ angular.module("newsApp").controller('mainCtrl', function($scope, authService,da
 		}
 
 	}
-
-	/*Subscripciones*/
-
-	
-
-
-
-	
-	
 });
 
 /***/ }),
-/* 7 */
+/* 12 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").directive('ngUserMenu', function() {
@@ -210,13 +231,67 @@ angular.module("newsApp").directive('ngAdminMenu', function() {
 });
 
 /***/ }),
-/* 8 */
+/* 13 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('authService',  function($http){
 	
+	var users=[
+		{"account":"normaluser",
+		"password":"12345678",
+		"name":"Usuario",
+		"lastname":"Comun",
+		"type":"user",
+		"subscriptions":{"economy":true,
+						"international":true}
+					
+		},
+
+
+		{"account":"authoruser",
+		"password":"12345678",
+		"name":"Usuario",
+		"lastname":"Autor",
+		"type":"author"
+		},
+
+
+		{"account":"adminuser",
+		"password":"12345678",
+		"name":"Usuario",
+		"lastname":"Admin",
+		"type":"admin"
+		}
+	];
+
+	this.userLogued = users[2];
+
+	this.logued = function(){
+		return this.userLogued;
+	}
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+angular.module("newsApp").service('dataService',  function($http){
+	
+	this.getNews = function(callback){
+		$http.get('/api/news')
+		.then(callback);
+	};
+	
+	this.deleteNews = function(news){
+
+	}
+
+	this.saveNews = function(){
+
+	}
+
 	this.getUsers = function(callback){
-		$http.get('mock/users.json')
+		$http.get('/api/users')
 		.then(callback);
 	};
 	
@@ -230,31 +305,6 @@ angular.module("newsApp").service('authService',  function($http){
 });
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-angular.module("newsApp").service('dataService',  function($http){
-	
-	this.getNews = function(callback){
-		$http.get('mock/news.json')
-		.then(callback);
-	};
-	
-	this.deleteNews = function(news){
-
-	}
-
-	this.saveNews = function(){
-
-	}
-});
-
-/***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
 /* 15 */,
 /* 16 */,
 /* 17 */,
@@ -264,31 +314,37 @@ angular.module("newsApp").service('dataService',  function($http){
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 25 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 26 */
+/* 32 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 27 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 28 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /**
@@ -615,12 +671,12 @@ k=j[0],
 j[2]||j[4]||(k=(j[3]?"http://":"mailto:")+k),l=j.index,h(m.substr(0,l)),i(k,j[0].replace(d,"")),m=m.substring(l+j[0].length);return h(m),a(n.join(""))}}])}(window,window.angular);
 
 /***/ }),
-/* 29 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(a,b){ true?
 // AMD. Register as an anonymous module unless amdModuleId is set
-!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2),__webpack_require__(4)], __WEBPACK_AMD_DEFINE_RESULT__ = function(c,d){return a["textAngular.name"]=b(c,d)}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2),__webpack_require__(5)], __WEBPACK_AMD_DEFINE_RESULT__ = function(c,d){return a["textAngular.name"]=b(c,d)}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)):"object"==typeof exports?
 // Node. Does not work with strict CommonJS, but
 // only CommonJS-like environments that support module.exports,
@@ -2102,22 +2158,31 @@ null===b.buttontext&&delete b.buttontext,null===b.iconclass&&delete b.iconclass,
 g.addTool=function(a,b,c,e){g.tools[a]=angular.extend(g.$new(!0),d[a],k,{name:a}),g.tools[a].$element=j(d[a],g.tools[a]);var f;void 0===c&&(c=g.toolbar.length-1),f=angular.element(h.children()[c]),void 0===e?(f.append(g.tools[a].$element),g.toolbar[c][g.toolbar[c].length-1]=a):(f.children().eq(e).after(g.tools[a].$element),g.toolbar[c][e]=a)},b.registerToolbar(g),g.$on("$destroy",function(){b.unregisterToolbar(g.name)})}}}]),u.directive("textAngularVersion",["textAngularManager",function(a){var b=a.getVersion();return{restrict:"EA",link:function(a,c,d){c.html(b)}}}]),u.name});
 
 /***/ }),
-/* 30 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(5);
+__webpack_require__(7);
 
 var angular = __webpack_require__(1);
 
-angular.module("newsApp",['textAngular']);
+angular.module("newsApp",['textAngular','ngRoute']);
 
-__webpack_require__(6);
-__webpack_require__(7);
+//Controllers
 __webpack_require__(9);
+__webpack_require__(11);
+__webpack_require__(10);
 __webpack_require__(8);
+
+//Directives
+__webpack_require__(12);
+
+//Services
+__webpack_require__(14);
+__webpack_require__(13);
+__webpack_require__(6);
 
 
 
@@ -2125,5 +2190,5 @@ __webpack_require__(8);
 
 
 /***/ })
-],[30]);
+],[36]);
 //# sourceMappingURL=app.bundle.js.map

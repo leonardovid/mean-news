@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Todo Noticias</title>
         <link rel="stylesheet" href="css/bundle.css">       
-    <body ng-app="newsApp" ng-controller="mainCtrl" >
+    <body ng-app="newsApp"  >
         
-        <div ng-include="template.partials.header"></div>
+        <div ng-include="'templates/partials/header.html'"></div>
         <div class="container content" >
-            <div ng-include="currentTemplate"></div>
+            <div ng-view></div>
         </div>
         <div class="footer">
-            <div ng-include="template.partials.footer"></div>
+            <div ng-include="'templates/partials/footer.html'"></div>
         </div>
     <script src="js/vendor.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
