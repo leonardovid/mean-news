@@ -7077,6 +7077,17 @@ body {
 	margin-bottom: 30px;
 }
 
+#dialog{
+	position: fixed;
+	width: 500px;
+	height: 120px;
+	top: 50%;
+	left: 50%;
+	margin-top: -100px; 
+	margin-left: -250px; 
+	z-index: 100;
+}
+
 /*Footer*/
 
 .footer{

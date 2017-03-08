@@ -9,15 +9,18 @@ webpackJsonp([0],[
 /***/ (function(module, exports) {
 
 angular.module("newsApp").config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
-		$routeProvider.when('/', {templateUrl: 'templates/listNews.html', controller:'newsCtrl'});
-		$routeProvider.when('/auth', {templateUrl: 'templates/auth.html'});
-		$routeProvider.when('/panel', {templateUrl: 'templates/panel.html',controller:'panelCtrl'});
-		$routeProvider.when('/news:id', {templateUrl: './templates/viewNews.html',controller:'newsCtrl'});
-		$routeProvider.otherwise({redirectTo: '/'});
 
-		$locationProvider.html5Mode({enabled: true, requireBase: false});
+	$routeProvider.when('/', {templateUrl: 'templates/listNews.html', controller:'newsCtrl'});
+	$routeProvider.when('/auth', {templateUrl: 'templates/auth.html'});
+	$routeProvider.when('/panel', {templateUrl: 'templates/panel.html',controller:'panelCtrl'});
+	$routeProvider.when('/news/:id', {templateUrl: 'templates/viewNews.html',controller:'newsCtrl'});
+	$routeProvider.otherwise({redirectTo: '/'});
+
+	$locationProvider.html5Mode({enabled: true, requireBase: false});
 
 }]);
+
+
 
 /***/ }),
 /* 7 */
@@ -62,20 +65,21 @@ angular.module("newsApp").controller('authCtrl', function($scope,$interval ,auth
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams ,dataService){
+/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService){
 
 
-
+	
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
-			id = $routeParams.id;
-			if (id!=null) {
-	 			$scope.news= $scope.newsArray[id];
-	 			}
 		});
 
+	if ($routeParams.id!=null) {
+		dataService.getNewsById(function(res){
+				$scope.news=res.data;
+			},$routeParams.id);
+	}
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -100,39 +104,6 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams ,
  		$scope.preview=true;
  	}
 
- 	$scope.addNews= function(news){
- 		if ($scope.newsArray.indexOf(news._id)==-1) {
- 			$scope.newsArray.unshift(news);
- 		}
- 		else{
-
- 		}
- 		$scope.showCreateNews();
- 		
- 	}
-
- 	$scope.deleteNews =function (news, $index){
- 		$scope.newsArray.splice($index, 1)
- 		dataService.deleteNews(news);
-
- 	}
-
- 	$scope.saveEditedNews = function(){
- 		for(var prop in $scope.selectedNews) {
- 			$scope.originalNews[prop]=$scope.selectedNews[prop];
- 			$scope.showListNewsToEdit();
- 		}
- 	}
-
-
- 	$scope.editSelectedNews= function(news, $index){
- 		$scope.showNewsToEdit();
- 		$scope.originalNews = $scope.newsArray[$index];
- 		$scope.selectedNews =  Object.assign({}, $scope.originalNews);
- 		
-
- 	}
-
  	$scope.goBackFrom= function(from){
 		if (from == 'preview') {
 			$scope.preview=false;
@@ -145,7 +116,71 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams ,
 		}
 
 	}
+
+	$scope.closeDialog = function(){
+ 		$('#dialog').remove();
+
+ 	}
+
+ 	$scope.showDialog =function (id, $index){
+ 		var divDialog = $('<div id="dialog" class="panel panel-danger text-center"></div>');
+ 		var h2= '<h3>¿Esta seguro que desea Eliminarla?</h3>';
+ 		var buttonConfirm = $('<button class="btn btn-success">Confirmar</button>');
+ 		buttonConfirm.attr("ng-click","deleteNews('"+id+"','"+$index+"')");
+ 		var buttonCancel = $('<button class="btn btn-primary">Cancelar</button>');
+ 		buttonCancel.attr("ng-click","closeDialog()");
+
+ 		divDialog.append(h2);
+ 		divDialog.append(buttonConfirm);
+ 		divDialog.append(buttonCancel);
+
+ 		var compiledDialog = $compile(divDialog)($scope); 
+ 		$('body').append(compiledDialog);
+ 		
+ 		
+ 	}
+
+	/*CRUD*/
+ 	$scope.addNews= function(news){
+ 		if ($scope.newsArray.indexOf(news._id)==-1) {
+ 			$scope.newsArray.unshift(news);
+ 			dataService.saveNews(news);
+ 		}
+ 		else{
+
+ 		}
+ 		$scope.showCreateNews();
+ 		
+ 	}
+	
+ 	
+ 	$scope.deleteNews= function(id, $index){
+ 		$scope.newsArray.splice($index, 1)
+ 		dataService.deleteNews(id);
+ 		$scope.closeDialog();
+
+ 	}
+
+ 	$scope.saveEditedNews = function(){
+ 		for(var prop in $scope.selectedNews) {
+ 			$scope.originalNews[prop]=$scope.selectedNews[prop];
+ 			$scope.showListNewsToEdit();
+ 		}
+ 		dataService.editNews($scope.originalNews);
+ 	}
+
+
+ 	$scope.editSelectedNews= function(news, $index){
+ 		$scope.showNewsToEdit();
+ 		$scope.originalNews = $scope.newsArray[$index];
+ 		$scope.selectedNews =  Object.assign({}, $scope.originalNews);
+ 		
+
+ 	}
+
+ 	
 });
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 10 */
@@ -277,18 +312,31 @@ angular.module("newsApp").service('authService',  function($http){
 
 angular.module("newsApp").service('dataService',  function($http){
 	
+	/*Noticias*/
 	this.getNews = function(callback){
 		$http.get('/api/news')
 		.then(callback);
 	};
+
+	this.getNewsById = function(callback,id){
+		$http.get('/api/news/'+id)
+		.then(callback);
+	};
+
+	this.editNews = function(news){
+		$http.put('/api/news/',news);
+	}
 	
-	this.deleteNews = function(news){
-
+	this.deleteNews = function(id){
+		$http.delete('api/news/'+id);
 	}
 
-	this.saveNews = function(){
-
+	this.saveNews = function(news){
+		$http.post('/api/news',news);
 	}
+
+
+	/*Usuarios*/
 
 	this.getUsers = function(callback){
 		$http.get('/api/users')

@@ -21,7 +21,8 @@
         <td>{{news.author}}</td>
         <td >
         	<div class="text-right">
-        		<button href="" ng-click="editSelectedNews(news, $index)" class="btn btn-primary">Editar</button>
+        		<button  ng-click="editSelectedNews(news, $index)" class="btn btn-primary">Editar</button>
+        		<button  ng-click="showDialog(news._id, $index)" class="btn btn-danger">Eliminar</button>
         	</div>
 		</td>
       </tr>
@@ -35,8 +36,6 @@
 			<input type="file" name="pic" accept="image/*">
 			<h1><input  ng-model="selectedNews.title" ng-hide="preview" 	type="text"  placeholder={{selectedNews.title}}></h1>
 			<h3><input  ng-model="selectedNews.subtitle" ng-hide="preview" type="text" placeholder={{selectedNews.subtitle}} ></h3>
-			
-			
 			<div text-angular ng-model="selectedNews.content"></div>
 		</div>
 
