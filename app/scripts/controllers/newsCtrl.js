@@ -23,6 +23,8 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 		$scope.editing=false;
  		$scope.preview=false;
  		$scope.listNews=true;
+ 		$("#upload").val("");
+	 	$scope.imgToUpload= null;
 	}
 
 	$scope.showNewsToEdit= function(){
@@ -36,7 +38,9 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 		$scope.editing=true;
 	 	$scope.create=true;
 	 	$scope.selectedNews={};
-	 	$("#upload").val("");	
+	 	$("#upload").val("");
+	 	$scope.imgToUpload= null;
+
 	}
 
 	 	$scope.previewNews = function(){
@@ -101,19 +105,18 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 
 	/*CRUD*/
  	$scope.addNews= function(news){
- 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-		news.date = date;
-		news.author = $scope.userLogued.name;
-		news.img = '/img/'+$scope.imgToUpload.name;
- 		if ($scope.newsArray.indexOf(news._id)==-1) {
- 			$scope.newsArray.unshift(news);
- 			dataService.saveNews(news);
- 			$scope.uploadImg();
+ 		if (news.title && news.subtitle && news.content && $scope.imgToUpload) {
+ 			var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+			news.date = date;
+			news.author = $scope.userLogued.name;
+			news.img = '/img/'+$scope.imgToUpload.name;
+	 		if ($scope.newsArray.indexOf(news._id)==-1) {
+	 			$scope.newsArray.unshift(news);
+	 			dataService.saveNews(news);
+	 			$scope.uploadImg();
+	 		}
+ 			$scope.showCreateNews();
  		}
- 		else{
-
- 		}
- 		$scope.showCreateNews();
  		
  	}
 	
@@ -128,9 +131,14 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
  	$scope.saveEditedNews = function(){
  		for(var prop in $scope.selectedNews) {
  			$scope.originalNews[prop]=$scope.selectedNews[prop];
- 			$scope.showListNewsToEdit();
+ 			
  		}
+ 		if ($scope.imgToUpload) {
+	 		$scope.uploadImg();
+	 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+	 	}
  		dataService.editNews($scope.originalNews);
+ 		$scope.showListNewsToEdit();
  	}
 
 

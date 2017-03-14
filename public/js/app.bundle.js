@@ -148,6 +148,8 @@ __webpack_require__(34);
 		$scope.editing=false;
  		$scope.preview=false;
  		$scope.listNews=true;
+ 		$("#upload").val("");
+	 	$scope.imgToUpload= null;
 	}
 
 	$scope.showNewsToEdit= function(){
@@ -161,7 +163,9 @@ __webpack_require__(34);
 		$scope.editing=true;
 	 	$scope.create=true;
 	 	$scope.selectedNews={};
-	 	$("#upload").val("");	
+	 	$("#upload").val("");
+	 	$scope.imgToUpload= null;
+
 	}
 
 	 	$scope.previewNews = function(){
@@ -226,19 +230,18 @@ __webpack_require__(34);
 
 	/*CRUD*/
  	$scope.addNews= function(news){
- 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-		news.date = date;
-		news.author = $scope.userLogued.name;
-		news.img = '/img/'+$scope.imgToUpload.name;
- 		if ($scope.newsArray.indexOf(news._id)==-1) {
- 			$scope.newsArray.unshift(news);
- 			dataService.saveNews(news);
- 			$scope.uploadImg();
+ 		if (news.title && news.subtitle && news.content && $scope.imgToUpload) {
+ 			var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+			news.date = date;
+			news.author = $scope.userLogued.name;
+			news.img = '/img/'+$scope.imgToUpload.name;
+	 		if ($scope.newsArray.indexOf(news._id)==-1) {
+	 			$scope.newsArray.unshift(news);
+	 			dataService.saveNews(news);
+	 			$scope.uploadImg();
+	 		}
+ 			$scope.showCreateNews();
  		}
- 		else{
-
- 		}
- 		$scope.showCreateNews();
  		
  	}
 	
@@ -253,9 +256,14 @@ __webpack_require__(34);
  	$scope.saveEditedNews = function(){
  		for(var prop in $scope.selectedNews) {
  			$scope.originalNews[prop]=$scope.selectedNews[prop];
- 			$scope.showListNewsToEdit();
+ 			
  		}
+ 		if ($scope.imgToUpload) {
+	 		$scope.uploadImg();
+	 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+	 	}
  		dataService.editNews($scope.originalNews);
+ 		$scope.showListNewsToEdit();
  	}
 
 
