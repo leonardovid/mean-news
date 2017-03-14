@@ -44,14 +44,15 @@ app.get('/*', function(req, res){
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
+/*Ruta para añadir imagenes*/
 app.post('/api/upload', function(req, res) {
   if (!req.files)
     return res.status(400).send('No files were uploaded.');
  
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file 
+ 
   let file = req.files.upload;
  
-  // Use the mv() method to place the file somewhere on your server 
+
   file.mv(path.join(__dirname, '../public', 'img/'+file.name), function(err) {
     if (err)
       return res.status(500).send(err);

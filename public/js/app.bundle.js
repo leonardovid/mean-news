@@ -138,6 +138,7 @@ __webpack_require__(34);
 /* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routeParams,$compile ,dataService,authService,fileReader){
 
 	$scope.imageSrc="";
+	$scope.page= 0;
 
 	authService.confirmLogin(function (res){
 		var user=res.data;
@@ -152,6 +153,17 @@ __webpack_require__(34);
 		dataService.getNewsById(function(res){
 				$scope.news=res.data;
 			},$routeParams.id);
+	}
+
+	$scope.nextPage= function () {
+		$scope.page=$scope.page+1;
+		
+		dataService.getNews(function(res){
+			var array=res.data;
+			for (var i = 0; i < array.length; i++){				
+				$scope.newsArray.push(array[i]);
+			}
+		},$scope.page);
 	}
 
 	$scope.closeMessage= function(){
@@ -612,8 +624,8 @@ angular.module("newsApp").service('authService',  function($http){
 angular.module("newsApp").service('dataService',  function($http){
 	
 	/*Noticias*/
-	this.getNews = function(callback){
-		$http.get('/api/news')
+	this.getNews = function(callback,page){
+		$http.get('/api/news?page='+page)
 		.then(callback);
 	};
 

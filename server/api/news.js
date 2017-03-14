@@ -7,14 +7,19 @@ var News = require('../models/news');
 
 /*Noticias*/
 router.get('/news',function(req,res){
-	News.find(function (error,news) {
-		if (error) {
-			res.status(500);
-		}
-		else {
-			res.json(news);
-		}
-	})	
+	var pageOptions = {
+    page: req.query.page || 0,
+    limit: 9
+	}
+
+	News.find()
+    .skip(pageOptions.page*pageOptions.limit)
+    .limit(pageOptions.limit)
+    .sort({_id: -1})
+    .exec(function (err, news) {
+        if(err) { res.status(500).json(err); return; };
+        res.status(200).json(news);
+    })
 });
 
 router.get('/news/:id',function(req,res){

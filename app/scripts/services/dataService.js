@@ -1,8 +1,8 @@
 angular.module("newsApp").service('dataService',  function($http){
 	
 	/*Noticias*/
-	this.getNews = function(callback){
-		$http.get('/api/news')
+	this.getNews = function(callback,page){
+		$http.get('/api/news?page='+page)
 		.then(callback);
 	};
 

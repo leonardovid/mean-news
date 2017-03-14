@@ -13,7 +13,7 @@ router.get('/users',function(req,res){
 		else {
 			res.json(users);
 		}
-	})	
+	});	
 });
 
 router.put('/users/',function(req,res){

@@ -1,5 +1,5 @@
 <div class="row">
-	<div ng-repeat="news in newsArray track by $index"  class="col-sm-6 col-md-4 none-decoration" >
+	<div ng-repeat="news in newsArray | orderBy:'-_id'"  class="col-sm-6 col-md-4 none-decoration" >
 	  <a href="/news/{{news._id}}" class="none-decoration" >
 		  <div  class="thumbnail">
 		  	<img ng-src="{{news.img}}" alt="...">
@@ -9,7 +9,10 @@
 			</div>
 		  </div>
 	  </a>
-	</div>
+	</div>	
+</div>
+<div class="text-center">
+		<a href="" ng-click="nextPage()" class="btn-lg btn-link clear-top" id="more">Mostrar más</a>
 </div>
 
 
