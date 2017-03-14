@@ -5,9 +5,22 @@ angular.module("newsApp").controller('profileCtrl', function($scope,$window,$com
 		$scope.userLogued=user;
 	});
 
+	$scope.closeMessage= function(){
+		$scope.success=false
+		$scope.error=false;
+	}
+
 	$scope.savePassword = function(credentials){
 		credentials.email= $scope.userLogued.email;
-		authService.savePassword(credentials);
+		authService.savePassword(credentials,function(res){
+			//success callback
+			$scope.successTextAlert = "La contraseña se a actualizado exitosamente";
+	 		$scope.success = true;
+		},function(res){
+			//error callback
+			$scope.errorTextAlert="La antigua contraseña no es correcta";
+			$scope.error=true;
+		});
 	}
 
 	$scope.closeAccount= function(){

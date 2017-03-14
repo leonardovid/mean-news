@@ -26,8 +26,8 @@ angular.module("newsApp").service('authService',  function($http){
 		$http.delete('/api/users/'+userId);
 	}
 
-	this.savePassword= function (credentials){
-		$http.put('/api/users/savePassword',credentials);
+	this.savePassword= function (credentials,callback,errorCallback){
+		$http.put('/api/users/savePassword',credentials).then(callback,errorCallback);
 	}
 
 

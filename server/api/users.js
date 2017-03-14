@@ -28,11 +28,11 @@ router.put('/users/',function(req,res){
 		
 });
 
-router.put('/users/savePassword',function(req,res){
+router.put('/users/savePassword',function(req,res, next){
 	var credentials = req.body;
 	User.changePassword(credentials.email,credentials.oldPassword,credentials.newPassword,function(error,user){	
 		if (error || !user) {
-			var error = new Error ("El email o contraseña son erroneos")
+			var error = new Error ("La antigua contraseña no es correcta")
 			return next(error);
 		} else {
 			

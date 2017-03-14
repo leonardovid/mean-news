@@ -59,6 +59,10 @@ userSchema.statics.changePassword= function(email, password, newPassword, callba
 					}
 				});
 				
+			}else{
+				var err = new Error('El antiguo password no concuerda');
+				err.status = 401;
+				return callback(err);
 			};
 		});
 	})
