@@ -4,7 +4,8 @@
 		<button type="button" class="btn btn-primary col-md-6" ng-click="showCreateNews()">Publicar una noticia</button>
 		<button type="button" class="btn btn-primary col-md-6" ng-click="showListNewsToEdit()">Editar una noticia</button>
 	</div>
-	<div></div>
+
+	
 
 	<div ng-show="listNews" class="panel panel-primary" >
 		<table class="table table-hover">
@@ -57,9 +58,15 @@
 				<a href="" ng-hide="create" ng-click="saveEditedNews()">Guardar</a>
 				<a href="" ng-show="create" ng-click="addNews(selectedNews)">Guardar</a>
 			</div>	
-	</div>
+</div>	
+<div class="alert alert-success fade in" ng-show="success">
+	    <a href="" class="close" ng-click="closeMessage()" >X</a>
+	    <strong>¡Bien!</strong> {{successTextAlert}} 
 </div>
-
+<div class="alert alert-danger fade in" ng-show="error">
+	    <a href="" class="close" ng-click="closeMessage()" >X</a>
+	    <strong>¡Ups!</strong> {{errorTextAlert}} 
+</div>
 
 
 

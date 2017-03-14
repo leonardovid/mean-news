@@ -17,7 +17,10 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 			},$routeParams.id);
 	}
 
-	
+	$scope.closeMessage= function(){
+		$scope.success=false;
+		$scope.error=false;
+	}
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -114,8 +117,13 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 	 			$scope.newsArray.unshift(news);
 	 			dataService.saveNews(news);
 	 			$scope.uploadImg();
+	 			$scope.successTextAlert = "La noticia se a añadido exitosamente";
+	 			$scope.success = true;
 	 		}
  			$scope.showCreateNews();
+ 		}else {
+ 			$scope.errorTextAlert = "Revisa si todos los campos estan completos";
+	 			$scope.error = true;
  		}
  		
  	}
@@ -128,17 +136,20 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routePa
 
  	}
 
- 	$scope.saveEditedNews = function(){
- 		for(var prop in $scope.selectedNews) {
- 			$scope.originalNews[prop]=$scope.selectedNews[prop];
- 			
- 		}
- 		if ($scope.imgToUpload) {
-	 		$scope.uploadImg();
-	 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+ 	$scope.saveEditedNews = function(){ 		
+ 		if ($scope.selectedNews.title && $scope.selectedNews.subtitle && $scope.selectedNews.content){
+	 		for(var prop in $scope.selectedNews) {
+	 			$scope.originalNews[prop]=$scope.selectedNews[prop]; 			
+	 		}
+	 		if ($scope.imgToUpload) {
+		 		$scope.uploadImg();
+		 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+		 	}
+	 		dataService.editNews($scope.originalNews);
+	 		$scope.successTextAlert = "La noticia se a modificado exitosamente";
+		 	$scope.success = true;
+	 		$scope.showListNewsToEdit();
 	 	}
- 		dataService.editNews($scope.originalNews);
- 		$scope.showListNewsToEdit();
  	}
 
 

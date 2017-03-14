@@ -2,17 +2,15 @@ angular.module("newsApp").service('authService',  function($http){
 	
 
 	this.confirmLogin = function(callback){
-		$http.post('/api/confirm-login')
-		.then(callback);
+		$http.post('/api/confirm-login').then(callback);
 	}
 
-	this.registerUser = function(user,callback){
-		$http.post('/api/register',user)
-		.then(callback);
+	this.registerUser = function(user,callback,errorCallback){
+		$http.post('/api/register',user).then(callback,errorCallback);
 	}
 
-	this.logUser= function(credentials,callback){
-		$http.post('/api/login',credentials).then(callback);
+	this.logUser= function(credentials,callback,errorCallback){
+		$http.post('/api/login',credentials).then(callback,errorCallback);
 		
 	}
 

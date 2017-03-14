@@ -13,17 +13,29 @@ angular.module("newsApp").controller('authCtrl', function($scope,$window ,authSe
 		authService.logOut()
 	}
 
+	$scope.closeMessage= function(){
+		
+		$scope.error=false;
+	}
+
 	$scope.login= function (credentials){
-		authService.logUser(credentials,function(){
+		authService.logUser(credentials,function(res){
+
 			$window.location.href = '/panel';
+		},function(res){
+			$scope.errorTextAlert="El Email o la contraseña son incorrectos";
+			$scope.error=true;
 		});
 	}		
 
 	$scope.register= function (user){
 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
 		user.regDate = date;
-		authService.registerUser(user,function(){
+		authService.registerUser(user,function(res){
 			$window.location.href = '/';			
+		},function(res){
+			$scope.errorTextAlert="El email ya se encuentra registrado";
+			$scope.error=true;
 		});
 	}
 	

@@ -60,10 +60,10 @@ router.post('/register', function(req, res){
 	var user = req.body;
 	User.create(user,function(error,user){
 		if (error) {
-			return res.status(500);
+			return res.status(500).send("El email ya se encuentra registrado");
 		}
 		req.session.userId = user._id;
-		return res.redirect('/');
+		
 	});
 	
 });

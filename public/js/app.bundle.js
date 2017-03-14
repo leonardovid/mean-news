@@ -64,17 +64,29 @@ __webpack_require__(34);
 		authService.logOut()
 	}
 
+	$scope.closeMessage= function(){
+		
+		$scope.error=false;
+	}
+
 	$scope.login= function (credentials){
-		authService.logUser(credentials,function(){
+		authService.logUser(credentials,function(res){
+
 			$window.location.href = '/panel';
+		},function(res){
+			$scope.errorTextAlert="El Email o la contraseña son incorrectos";
+			$scope.error=true;
 		});
 	}		
 
 	$scope.register= function (user){
 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
 		user.regDate = date;
-		authService.registerUser(user,function(){
+		authService.registerUser(user,function(res){
 			$window.location.href = '/';			
+		},function(res){
+			$scope.errorTextAlert="El email ya se encuentra registrado";
+			$scope.error=true;
 		});
 	}
 	
@@ -142,7 +154,10 @@ __webpack_require__(34);
 			},$routeParams.id);
 	}
 
-	
+	$scope.closeMessage= function(){
+		$scope.success=false;
+		$scope.error=false;
+	}
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -239,8 +254,13 @@ __webpack_require__(34);
 	 			$scope.newsArray.unshift(news);
 	 			dataService.saveNews(news);
 	 			$scope.uploadImg();
+	 			$scope.successTextAlert = "La noticia se a añadido exitosamente";
+	 			$scope.success = true;
 	 		}
  			$scope.showCreateNews();
+ 		}else {
+ 			$scope.errorTextAlert = "Revisa si todos los campos estan completos";
+	 			$scope.error = true;
  		}
  		
  	}
@@ -253,17 +273,20 @@ __webpack_require__(34);
 
  	}
 
- 	$scope.saveEditedNews = function(){
- 		for(var prop in $scope.selectedNews) {
- 			$scope.originalNews[prop]=$scope.selectedNews[prop];
- 			
- 		}
- 		if ($scope.imgToUpload) {
-	 		$scope.uploadImg();
-	 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+ 	$scope.saveEditedNews = function(){ 		
+ 		if ($scope.selectedNews.title && $scope.selectedNews.subtitle && $scope.selectedNews.content){
+	 		for(var prop in $scope.selectedNews) {
+	 			$scope.originalNews[prop]=$scope.selectedNews[prop]; 			
+	 		}
+	 		if ($scope.imgToUpload) {
+		 		$scope.uploadImg();
+		 		$scope.originalNews.img= '/img/'+$scope.imgToUpload.name;
+		 	}
+	 		dataService.editNews($scope.originalNews);
+	 		$scope.successTextAlert = "La noticia se a modificado exitosamente";
+		 	$scope.success = true;
+	 		$scope.showListNewsToEdit();
 	 	}
- 		dataService.editNews($scope.originalNews);
- 		$scope.showListNewsToEdit();
  	}
 
 
@@ -551,17 +574,15 @@ angular.module("newsApp").service('authService',  function($http){
 	
 
 	this.confirmLogin = function(callback){
-		$http.post('/api/confirm-login')
-		.then(callback);
+		$http.post('/api/confirm-login').then(callback);
 	}
 
-	this.registerUser = function(user,callback){
-		$http.post('/api/register',user)
-		.then(callback);
+	this.registerUser = function(user,callback,errorCallback){
+		$http.post('/api/register',user).then(callback,errorCallback);
 	}
 
-	this.logUser= function(credentials,callback){
-		$http.post('/api/login',credentials).then(callback);
+	this.logUser= function(credentials,callback,errorCallback){
+		$http.post('/api/login',credentials).then(callback,errorCallback);
 		
 	}
 
