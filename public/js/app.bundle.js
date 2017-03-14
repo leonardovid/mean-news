@@ -642,6 +642,7 @@ angular.module("newsApp").service('dataService',  function($http){
 		.then(callback);
 	};
 
+
 	this.getNewsById = function(callback,id){
 		$http.get('/api/news/'+id)
 		.then(callback);
