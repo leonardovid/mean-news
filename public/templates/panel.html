@@ -1,7 +1,6 @@
-<div ng-controller="authCtrl">
-	<h3>Bienvenido {{userLogued.name}} {{userLogued.lastname}}</h3>
+<div >	
 	<div class="menu pull-left">
-		<div ng-if="userLogued.type=='user'" ng-user-menu></div>
+		<div ng-if="userLogued != null" ng-user-menu></div>
 		<div ng-if="userLogued.type=='author' || userLogued.type=='admin'" ng-author-menu></div>
 		<div ng-if="userLogued.type=='admin'" ng-admin-menu></div>
 	</div>

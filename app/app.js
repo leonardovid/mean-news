@@ -11,6 +11,7 @@ require('./scripts/controllers/newsCtrl.js');
 require('./scripts/controllers/usersCtrl.js');
 require('./scripts/controllers/panelCtrl.js');
 require('./scripts/controllers/authCtrl.js');
+require('./scripts/controllers/profileCtrl.js');
 
 //Directives
 require('./scripts/directives/ngMenus.js');

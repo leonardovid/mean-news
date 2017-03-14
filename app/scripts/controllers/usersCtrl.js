@@ -11,14 +11,6 @@ angular.module("newsApp").controller('usersCtrl', function($scope, authService,d
 		$scope.users= fileteredUsers;
 	});
 
-
-
-	
-
-	$scope.createUser= function(){}
-
-	$scope.deleteUser= function(){}
-
 	$scope.changeUserType= function(user, option){
 		if (option == "promote") {
 			user.type="author";
@@ -26,6 +18,9 @@ angular.module("newsApp").controller('usersCtrl', function($scope, authService,d
 		if (option == "demote") {
 			user.type="user";
 		}
+		authService.updateUser(user);
 
 	}
+
+	
 });

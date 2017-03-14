@@ -1,9 +1,8 @@
 'use strict';
 var express = require('express');
-
 var router = express.Router();
 var News = require('../models/news');
-var User = require('../models/user');
+
 
 
 /*Noticias*/
@@ -61,19 +60,6 @@ router.delete('/news/:id',function(req,res){
 		res.json({"message":"news removed"})
 	});
 		
-});
-
-/*Usuarios*/
-
-router.get('/users',function(req,res){
-	User.find(function (error,users) {
-		if (error) {
-			res.status(500);
-		}
-		else {
-			res.json(users);
-		}
-	})	
 });
 
 module.exports = router;

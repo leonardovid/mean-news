@@ -1,7 +1,7 @@
 'use strict';
 
 var News = require('./models/news');
-var User = require('./models/user');
+var User = require('./models/users');
 
 var newsArray = [
 	{
@@ -87,27 +87,26 @@ var newsArray = [
 var usersArray = [
 	{"account":"normaluser",
 	"password":"12345678",
-	"name":"Usuario",
-	"lastname":"Comun",
+	"name":"Usuario Comun",
+	"email":"comun@usuario.com",
 	"type":"user",
-	"subscriptions":{"economy":true,
-					"international":true}
+	
 				
 	},
 
 
 	{"account":"authoruser",
 	"password":"12345678",
-	"name":"Usuario",
-	"lastname":"Autor",
+	"name":"Usuario Autor",
+	"email":"autor@usuario.com",
 	"type":"author"
 	},
 
 
 	{"account":"adminuser",
 	"password":"12345678",
-	"name":"Usuario",
-	"lastname":"Admin",
+	"name":"Usuario Admin",
+	"email":"admin@usuario.com",
 	"type":"admin"
 	}
 ];
@@ -116,13 +115,15 @@ User.find({},function(error,result){
  	
 	if (result.length==0) {
 		usersArray.forEach(function(user,index){
+			var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
 			User.create({
-						account:user.account,
+
+						regDate:date,
 						password:user.password,
 						name:user.name,
-						lastname:user.lastname,
+						email:user.email,
 						type:user.type,
-						subscriptions:user.subscriptions
+						
 					})
 
 		});

@@ -6977,6 +6977,10 @@ body {
 	margin-right: 30%;
 }
 
+.btn-save{
+	margin-top: 40px;
+}
+
 .none-decoration a,.none-decoration a:hover,.none-decoration a:visited{
 	text-decoration: none;
 }
@@ -7002,15 +7006,23 @@ body {
 	color: lightgrey;
 }
 
-#logout,#user{
-	font-size: 25px;
+#user{
+	font-size: 12px;
 	margin-top:5px;
-	cursor:pointer;
+	
 	color: white;
+}
+
+#logout {
+	padding-left: 0px;
 }
 
 #logout:hover{
 	color: #c0392b;
+}
+
+#panel-btn{
+	background-color:#286090;
 }
 
 .linkText {
@@ -7126,4 +7138,14 @@ body {
 	margin-bottom: 5px;
 
 }
+
+#password-label,#field-label{
+	display: none;
+}
+
+/*Perfil*/
+
+.user-information{
+	margin-left: 150px;
+} 
 /*# sourceMappingURL=bundle.css.map*/

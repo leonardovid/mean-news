@@ -11,7 +11,7 @@ webpackJsonp([0],[
 angular.module("newsApp").config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
 	$routeProvider.when('/', {templateUrl: 'templates/listNews.html', controller:'newsCtrl'});
-	$routeProvider.when('/auth', {templateUrl: 'templates/auth.html'});
+	$routeProvider.when('/auth', {templateUrl: 'templates/auth.html',controller:'authCtrl'});
 	$routeProvider.when('/panel', {templateUrl: 'templates/panel.html',controller:'panelCtrl'});
 	$routeProvider.when('/news/:id', {templateUrl: 'templates/viewNews.html',controller:'newsCtrl'});
 	$routeProvider.otherwise({redirectTo: '/'});
@@ -32,44 +32,104 @@ __webpack_require__(3);
 /*Bootstrap*/
 __webpack_require__(0);
 __webpack_require__(4);
-__webpack_require__(32);
+__webpack_require__(33);
 
 /*Text Angular*/
-__webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
+__webpack_require__(36);
 
 /*Font Awesome*/
-__webpack_require__(30);
+__webpack_require__(31);
 
 /*CSS*/
-__webpack_require__(31);
+__webpack_require__(32);
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-angular.module("newsApp").controller('authCtrl', function($scope,$interval ,authService){
+/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('authCtrl', function($scope,$window ,authService){
+
 	
+	authService.confirmLogin(function (res){
+		var user=res.data;
+		$scope.userLogued=user;
+		$scope.userLogued.firstName= user.name.split(' ')[0];
+	});
 	
-	$scope.userLogued = authService.logued();
 
 	$scope.logoutUser = function (){
 		$scope.userLogued=null;
+		authService.logOut()
 	}
 
+	$scope.login= function (credentials){
+		authService.logUser(credentials,function(){
+			$window.location.href = '/panel';
+		});
+	}		
+
+	$scope.register= function (user){
+		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+		user.regDate = date;
+		authService.registerUser(user,function(){
+			$window.location.href = '/';			
+		});
+	}
 	
-	
-	
+	$scope.checkFields= function(){
+		var passwordMatch= false;
+		var email = false;
+		var name= false
+		var password = false
+
+		if ($scope.user.password==$scope.repeatPassword) {		
+			passwordMatch=true;
+			$('#password-label').hide()	
+		}
+		else{
+			password=false;
+			$('#password-label').show()
+		}
+
+		if ($scope.user.email==null || $scope.user.email.length==0) {
+			email=false;
+		} else { email=true; }
+
+		if ($scope.user.name==null || $scope.user.name.length==0) {
+			name=false;
+		} else { name=true; }
+
+		if ($scope.user.password==null || $scope.user.password.length==0) {
+			password=false;
+		} else { password=true; }
+
+
+		if (password && email && name) {
+			$('#field-label').hide();
+		} else { $('#field-label').show(); }
+
+		if (password && email && name && passwordMatch) {
+			$('#regButton').prop('disabled',false);
+		} else { $('#regButton').prop('disabled',true); }
+
+			
+	}
 });
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService){
+/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService,authService){
 
 
+	authService.confirmLogin(function (res){
+		var user=res.data;
+		$scope.userLogued=user;
+	});
 	
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
@@ -142,6 +202,9 @@ angular.module("newsApp").controller('authCtrl', function($scope,$interval ,auth
 
 	/*CRUD*/
  	$scope.addNews= function(news){
+ 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+		news.date = date;
+		news.author = $scope.userLogued.name;
  		if ($scope.newsArray.indexOf(news._id)==-1) {
  			$scope.newsArray.unshift(news);
  			dataService.saveNews(news);
@@ -186,16 +249,22 @@ angular.module("newsApp").controller('authCtrl', function($scope,$interval ,auth
 /* 10 */
 /***/ (function(module, exports) {
 
-angular.module("newsApp").controller('panelCtrl', function($scope){	
+angular.module("newsApp").controller('panelCtrl', function($scope,authService){	
 	
+	authService.confirmLogin(function (res){
+		var user=res.data;
+		$scope.userLogued=user;
+	});
+
 	$scope.template =
 	    {manageNews:'templates/control-panel/manageNews.html',
 	  	manageUsers: 'templates/control-panel/manageUsers.html',
-	  	manageSubscriptions:'templates/control-panel/manageSubscriptions.html'  
+	  	managePassword:'templates/control-panel/managePassword.html',
+	  	manageProfile:'templates/control-panel/manageProfile.html'  
 	};
 
 
-
+	$scope.activePanel = $scope.template.manageProfile;
 
 	$scope.changePanel= function(panel){
 		$scope.activePanel = $scope.template[panel];
@@ -206,6 +275,85 @@ angular.module("newsApp").controller('panelCtrl', function($scope){
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('profileCtrl', function($scope,$window,$compile,authService){
+
+	authService.confirmLogin(function (res){
+		var user=res.data;
+		$scope.userLogued=user;
+	});
+
+	$scope.savePassword = function(credentials){
+		credentials.email= $scope.userLogued.email;
+		authService.savePassword(credentials);
+	}
+
+	$scope.closeAccount= function(){
+		authService.deleteUser($scope.userLogued._id);
+		$scope.userLogued=null;
+		$scope.closeDialog();
+		authService.logOut();
+		$window.location.href="/";
+	}
+
+	$scope.closeDialog = function(){
+ 		$('#dialog').remove();
+
+ 	}
+
+ 	$scope.showDialog =function (id, $index){
+ 		var divDialog = $('<div id="dialog" class="panel panel-danger text-center"></div>');
+ 		var h2= '<h3>¿Esta seguro que desea Cerrarla?</h3>';
+ 		var buttonConfirm = $('<button class="btn btn-success">Confirmar</button>');
+ 		buttonConfirm.attr("ng-click","closeAccount()");
+ 		var buttonCancel = $('<button class="btn btn-primary">Cancelar</button>');
+ 		buttonCancel.attr("ng-click","closeDialog()");
+
+ 		divDialog.append(h2);
+ 		divDialog.append(buttonConfirm);
+ 		divDialog.append(buttonCancel);
+
+ 		var compiledDialog = $compile(divDialog)($scope); 
+ 		$('body').append(compiledDialog);
+ 		
+ 		
+ 	}
+
+ 	$scope.checkPasswords= function(credentials){
+		var passwordMatch= false;
+		var password = false
+
+		if (credentials.newPassword==credentials.repeatPassword) {		
+			passwordMatch=true;
+			$('#password-label').hide()	
+		}
+		else{
+			password=false;
+			$('#password-label').show()
+		}
+
+
+		if (credentials.oldPassword==null || credentials.oldPassword.length==0) {
+			password=false;
+		} else { password=true; }
+
+
+		if (password) {
+			$('#field-label').hide();
+		} else { $('#field-label').show(); }
+
+		if (password && passwordMatch) {
+			$('#changeButton').prop('disabled',false);
+		} else { $('#changeButton').prop('disabled',true); }
+
+			
+	}
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").controller('usersCtrl', function($scope, authService,dataService){
@@ -221,14 +369,6 @@ angular.module("newsApp").controller('usersCtrl', function($scope, authService,d
 		$scope.users= fileteredUsers;
 	});
 
-
-
-	
-
-	$scope.createUser= function(){}
-
-	$scope.deleteUser= function(){}
-
 	$scope.changeUserType= function(user, option){
 		if (option == "promote") {
 			user.type="author";
@@ -236,12 +376,15 @@ angular.module("newsApp").controller('usersCtrl', function($scope, authService,d
 		if (option == "demote") {
 			user.type="user";
 		}
+		authService.updateUser(user);
 
 	}
+
+	
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").directive('ngUserMenu', function() {
@@ -265,49 +408,51 @@ angular.module("newsApp").directive('ngAdminMenu', function() {
   }
 });
 
+
+
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('authService',  function($http){
 	
-	var users=[
-		{"account":"normaluser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Comun",
-		"type":"user",
-		"subscriptions":{"economy":true,
-						"international":true}
-					
-		},
 
-
-		{"account":"authoruser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Autor",
-		"type":"author"
-		},
-
-
-		{"account":"adminuser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Admin",
-		"type":"admin"
-		}
-	];
-
-	this.userLogued = users[2];
-
-	this.logued = function(){
-		return this.userLogued;
+	this.confirmLogin = function(callback){
+		$http.post('/api/confirm-login')
+		.then(callback);
 	}
+
+	this.registerUser = function(user,callback){
+		$http.post('/api/register',user)
+		.then(callback);
+	}
+
+	this.logUser= function(credentials,callback){
+		$http.post('/api/login',credentials).then(callback);
+		
+	}
+
+	this.logOut = function(callback){
+		$http.get('/api/logout').then(callback);
+	}
+
+	this.updateUser = function(user){
+		$http.put('/api/users',user);
+	}
+
+	this.deleteUser= function (userId){
+		$http.delete('/api/users/'+userId);
+	}
+
+	this.savePassword= function (credentials){
+		$http.put('/api/users/savePassword',credentials);
+	}
+
+
 });
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('dataService',  function($http){
@@ -328,7 +473,7 @@ angular.module("newsApp").service('dataService',  function($http){
 	}
 	
 	this.deleteNews = function(id){
-		$http.delete('api/news/'+id);
+		$http.delete('/api/news/'+id);
 	}
 
 	this.saveNews = function(news){
@@ -341,19 +486,12 @@ angular.module("newsApp").service('dataService',  function($http){
 	this.getUsers = function(callback){
 		$http.get('/api/users')
 		.then(callback);
-	};
+	}
 	
-	this.deleteUser = function(news){
-
-	}
-
-	this.saveUser = function(){
-
-	}
+	
 });
 
 /***/ }),
-/* 15 */,
 /* 16 */,
 /* 17 */,
 /* 18 */,
@@ -368,12 +506,7 @@ angular.module("newsApp").service('dataService',  function($http){
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 30 */,
 /* 31 */
 /***/ (function(module, exports) {
 
@@ -393,6 +526,12 @@ angular.module("newsApp").service('dataService',  function($http){
 
 /***/ }),
 /* 34 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -719,7 +858,7 @@ k=j[0],
 j[2]||j[4]||(k=(j[3]?"http://":"mailto:")+k),l=j.index,h(m.substr(0,l)),i(k,j[0].replace(d,"")),m=m.substring(l+j[0].length);return h(m),a(n.join(""))}}])}(window,window.angular);
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(a,b){ true?
@@ -2206,7 +2345,7 @@ null===b.buttontext&&delete b.buttontext,null===b.iconclass&&delete b.iconclass,
 g.addTool=function(a,b,c,e){g.tools[a]=angular.extend(g.$new(!0),d[a],k,{name:a}),g.tools[a].$element=j(d[a],g.tools[a]);var f;void 0===c&&(c=g.toolbar.length-1),f=angular.element(h.children()[c]),void 0===e?(f.append(g.tools[a].$element),g.toolbar[c][g.toolbar[c].length-1]=a):(f.children().eq(e).after(g.tools[a].$element),g.toolbar[c][e]=a)},b.registerToolbar(g),g.$on("$destroy",function(){b.unregisterToolbar(g.name)})}}}]),u.directive("textAngularVersion",["textAngularManager",function(a){var b=a.getVersion();return{restrict:"EA",link:function(a,c,d){c.html(b)}}}]),u.name});
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2220,16 +2359,17 @@ angular.module("newsApp",['textAngular','ngRoute']);
 
 //Controllers
 __webpack_require__(9);
-__webpack_require__(11);
+__webpack_require__(12);
 __webpack_require__(10);
 __webpack_require__(8);
+__webpack_require__(11);
 
 //Directives
-__webpack_require__(12);
+__webpack_require__(13);
 
 //Services
+__webpack_require__(15);
 __webpack_require__(14);
-__webpack_require__(13);
 __webpack_require__(6);
 
 
@@ -2238,5 +2378,5 @@ __webpack_require__(6);
 
 
 /***/ })
-],[36]);
+],[37]);
 //# sourceMappingURL=app.bundle.js.map

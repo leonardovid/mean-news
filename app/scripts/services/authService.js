@@ -1,36 +1,36 @@
 angular.module("newsApp").service('authService',  function($http){
 	
-	var users=[
-		{"account":"normaluser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Comun",
-		"type":"user",
-		"subscriptions":{"economy":true,
-						"international":true}
-					
-		},
 
-
-		{"account":"authoruser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Autor",
-		"type":"author"
-		},
-
-
-		{"account":"adminuser",
-		"password":"12345678",
-		"name":"Usuario",
-		"lastname":"Admin",
-		"type":"admin"
-		}
-	];
-
-	this.userLogued = users[2];
-
-	this.logued = function(){
-		return this.userLogued;
+	this.confirmLogin = function(callback){
+		$http.post('/api/confirm-login')
+		.then(callback);
 	}
+
+	this.registerUser = function(user,callback){
+		$http.post('/api/register',user)
+		.then(callback);
+	}
+
+	this.logUser= function(credentials,callback){
+		$http.post('/api/login',credentials).then(callback);
+		
+	}
+
+	this.logOut = function(callback){
+		$http.get('/api/logout').then(callback);
+	}
+
+	this.updateUser = function(user){
+		$http.put('/api/users',user);
+	}
+
+	this.deleteUser= function (userId){
+		$http.delete('/api/users/'+userId);
+	}
+
+	this.savePassword= function (credentials){
+		$http.put('/api/users/savePassword',credentials);
+	}
+
+
 });

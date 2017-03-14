@@ -1,6 +1,10 @@
-angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService){
+angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService,authService){
 
 
+	authService.confirmLogin(function (res){
+		var user=res.data;
+		$scope.userLogued=user;
+	});
 	
 	dataService.getNews(function(res){
 			$scope.newsArray=res.data;
@@ -73,6 +77,9 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$
 
 	/*CRUD*/
  	$scope.addNews= function(news){
+ 		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+		news.date = date;
+		news.author = $scope.userLogued.name;
  		if ($scope.newsArray.indexOf(news._id)==-1) {
  			$scope.newsArray.unshift(news);
  			dataService.saveNews(news);

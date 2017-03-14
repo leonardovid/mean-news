@@ -1,25 +1,24 @@
 <div class="center-mid-40 panel" id="auth">
 	<div ng-hide="registration" class="panel-body">
-		<form class="form-signin">
+		<form class="form-signin" ng-submit="login(credentials)">
 	        <h2 class="form-signin-heading">Ingrese sus datos</h2>
-	        <label for="inputEmail" class="sr-only">Correo Electónico</label>
-	        <input type="email" id="inputEmail" class="form-control" placeholder="Correo Electónico" required="" autofocus="">
-	        <label for="inputPassword" class="sr-only">Contraseña</label>
-	        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required="">
-	        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+	        <input type="email" ng-model="credentials.email" class="form-control" placeholder="Correo Electónico" required="" autofocus="">
+	        <input type="password" ng-model="credentials.password" class="form-control" placeholder="Contraseña" required="">
+	        <button id="logButton" class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
 	        <a href="" ng-click="registration=true" >Registrarse</a>
 		</form>
 	</div>
 	<div ng-show="registration" class="panel-body">
-		<form class="form-signin">
+		<form class="form-signin" ng-submit="register(user)">
 	        <h2 class="form-signin-heading">Cree una cuenta nueva</h2>
-	        <label for="inputEmail" class="sr-only">Correo Electónico</label>
-	        <input type="email" id="inputEmail" class="form-control" placeholder="Correo Electónico" required="" autofocus="">
-	        <label for="inputPassword" class="sr-only">Contraseña</label>
-	        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required="">
-	        <input type="password" id="inputPassword" class="form-control" placeholder="Repetir contraseña" required="">
-	        <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
-	        
+	        <label id="field-label" class="label label-danger" >Todos los campos son requeridos</label>
+	        <label id="password-label" class="label label-danger">Las contraseñas no concuerdan</label>	        
+	        <input type="text" ng-change="checkFields()" ng-model="user.name" class="form-control" placeholder="Nombre" required="" autofocus=""> 
+	        <input type="email" ng-change="checkFields()" ng-model="user.email" class="form-control" placeholder="Correo Electónico" required="" autofocus="">
+	        <input type="password" ng-change="checkFields()" ng-model="user.password" class="form-control" placeholder="Contraseña" required="">
+	        <input type="password"  ng-change="checkFields()" ng-model="repeatPassword" class="form-control" placeholder="Repetir contraseña" required="">
+	        <button id="regButton" class="btn btn-lg btn-primary btn-block" type="submit" disabled="true">Registrarse</button>
+	        <a href="" ng-click="registration=false" >Volver</a>
 		</form>
 	</div>
 	

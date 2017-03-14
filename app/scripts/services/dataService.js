@@ -16,7 +16,7 @@ angular.module("newsApp").service('dataService',  function($http){
 	}
 	
 	this.deleteNews = function(id){
-		$http.delete('api/news/'+id);
+		$http.delete('/api/news/'+id);
 	}
 
 	this.saveNews = function(news){
@@ -29,13 +29,7 @@ angular.module("newsApp").service('dataService',  function($http){
 	this.getUsers = function(callback){
 		$http.get('/api/users')
 		.then(callback);
-	};
+	}
 	
-	this.deleteUser = function(news){
-
-	}
-
-	this.saveUser = function(){
-
-	}
+	
 });

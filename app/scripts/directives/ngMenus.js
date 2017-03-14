@@ -18,3 +18,4 @@ angular.module("newsApp").directive('ngAdminMenu', function() {
     templateUrl: 'templates/control-panel/admin.html'
   }
 });
+

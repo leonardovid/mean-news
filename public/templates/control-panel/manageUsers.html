@@ -4,14 +4,12 @@
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Apellido</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="user in users">
         <td>{{user.name}}</td>
-        <td>{{user.lastname}}</td>
         <td >
         	<div class="text-right">
         		<button ng-if="user.type=='user'" class="btn btn-primary"  ng-click="changeUserType(user,'promote')">Convertir en Autor</button>   
