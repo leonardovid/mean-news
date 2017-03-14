@@ -1,12 +1,12 @@
 <div class="panel" >
 		<div class="news-view panel-body " >
 			<div class="text-center">
-				<img src="/img/place.png" class="img-rounded">
+					 <img ng-src="{{news.img}}" / id="newsImg">
 			</div>
 			<h1>{{news.title}}</h1>
 			<h2>{{news.subtitle}}</h2>
 			<div ng-bind-html= "news.content" ></div> 
 			
 		</div>
-		<div class="text-center"><a href="/" class="btn btn-default">Volver</a></div>
+		<div class="text-center"><a id="backButton" href="/" class="btn btn-warning">Volver</a></div>
 </div>

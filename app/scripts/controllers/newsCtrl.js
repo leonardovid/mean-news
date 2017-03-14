@@ -1,5 +1,6 @@
-angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService,authService){
+angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routeParams,$compile ,dataService,authService,fileReader){
 
+	$scope.imageSrc="";
 
 	authService.confirmLogin(function (res){
 		var user=res.data;
@@ -15,6 +16,8 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$
 				$scope.news=res.data;
 			},$routeParams.id);
 	}
+
+	
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -32,7 +35,8 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$
 		$scope.listNews=false;
 		$scope.editing=true;
 	 	$scope.create=true;
-	 	$scope.selectedNews={};	
+	 	$scope.selectedNews={};
+	 	$("#upload").val("");	
 	}
 
 	 	$scope.previewNews = function(){
@@ -75,14 +79,36 @@ angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$
  		
  	}
 
+ 	$scope.uploadImg= function(){
+		$http({
+            method: 'POST',
+            url: 'api/upload',
+            headers: {'Content-Type': undefined},
+            data: {
+                upload: $scope.imgToUpload
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                angular.forEach(data, function (value, key) {
+                    formData.append(key, value);
+                });               
+
+                return formData;
+            }
+        })
+        
+	}
+
 	/*CRUD*/
  	$scope.addNews= function(news){
  		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
 		news.date = date;
 		news.author = $scope.userLogued.name;
+		news.img = '/img/'+$scope.imgToUpload.name;
  		if ($scope.newsArray.indexOf(news._id)==-1) {
  			$scope.newsArray.unshift(news);
  			dataService.saveNews(news);
+ 			$scope.uploadImg();
  		}
  		else{
 

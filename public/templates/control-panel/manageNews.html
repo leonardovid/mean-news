@@ -33,7 +33,9 @@
 
 	<div ng-show="editing" class="panel panel-primary">
 		<div id="edit-news" ng-hide="preview" class="panel-body">
-			<input type="file" name="pic" accept="image/*">
+			<form enctype="multipart/form-data" >
+      			<input id="upload" accept="image/*" type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc" file-model="imgToUpload">
+    		</form>
 			<h1><input  ng-model="selectedNews.title" ng-hide="preview" 	type="text"  placeholder={{selectedNews.title}}></h1>
 			<h3><input  ng-model="selectedNews.subtitle" ng-hide="preview" type="text" placeholder={{selectedNews.subtitle}} ></h3>
 			<div text-angular ng-model="selectedNews.content"></div>
@@ -42,7 +44,7 @@
 
 		<div ng-show="preview" class="news-view panel-body" >
 			<div class="text-center">
-					<img src="./img/place.png" class="img-rounded">
+					 <img ng-src="{{imageSrc}}"  id="newsImg">
 			</div>
 			<h1>{{selectedNews.title}}</h1>	
 			<h3>{{selectedNews.subtitle}}</h3>

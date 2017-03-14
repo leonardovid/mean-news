@@ -32,18 +32,18 @@ __webpack_require__(3);
 /*Bootstrap*/
 __webpack_require__(0);
 __webpack_require__(4);
-__webpack_require__(33);
+__webpack_require__(35);
 
 /*Text Angular*/
-__webpack_require__(34);
-__webpack_require__(35);
 __webpack_require__(36);
+__webpack_require__(37);
+__webpack_require__(38);
 
 /*Font Awesome*/
-__webpack_require__(31);
+__webpack_require__(33);
 
 /*CSS*/
-__webpack_require__(32);
+__webpack_require__(34);
 
 /***/ }),
 /* 8 */
@@ -123,8 +123,9 @@ __webpack_require__(32);
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $routeParams,$compile ,dataService,authService){
+/* WEBPACK VAR INJECTION */(function($) {angular.module("newsApp").controller('newsCtrl', function($scope, $http,$routeParams,$compile ,dataService,authService,fileReader){
 
+	$scope.imageSrc="";
 
 	authService.confirmLogin(function (res){
 		var user=res.data;
@@ -140,6 +141,8 @@ __webpack_require__(32);
 				$scope.news=res.data;
 			},$routeParams.id);
 	}
+
+	
 	
 	$scope.showListNewsToEdit= function(){
 		$scope.editing=false;
@@ -157,7 +160,8 @@ __webpack_require__(32);
 		$scope.listNews=false;
 		$scope.editing=true;
 	 	$scope.create=true;
-	 	$scope.selectedNews={};	
+	 	$scope.selectedNews={};
+	 	$("#upload").val("");	
 	}
 
 	 	$scope.previewNews = function(){
@@ -200,14 +204,36 @@ __webpack_require__(32);
  		
  	}
 
+ 	$scope.uploadImg= function(){
+		$http({
+            method: 'POST',
+            url: 'api/upload',
+            headers: {'Content-Type': undefined},
+            data: {
+                upload: $scope.imgToUpload
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                angular.forEach(data, function (value, key) {
+                    formData.append(key, value);
+                });               
+
+                return formData;
+            }
+        })
+        
+	}
+
 	/*CRUD*/
  	$scope.addNews= function(news){
  		var date = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
 		news.date = date;
 		news.author = $scope.userLogued.name;
+		news.img = '/img/'+$scope.imgToUpload.name;
  		if ($scope.newsArray.indexOf(news._id)==-1) {
  			$scope.newsArray.unshift(news);
  			dataService.saveNews(news);
+ 			$scope.uploadImg();
  		}
  		else{
 
@@ -387,6 +413,52 @@ angular.module("newsApp").controller('usersCtrl', function($scope, authService,d
 /* 13 */
 /***/ (function(module, exports) {
 
+angular.module('newsApp')
+  .directive("ngFileSelect", function(fileReader, $timeout) {
+    return {
+      scope: {
+        ngModel: '='
+      },
+      link: function($scope, el) {
+        function getFile(file) {
+          fileReader.readAsDataUrl(file, $scope)
+            .then(function(result) {
+              $timeout(function() {
+                $scope.ngModel = result;
+                $scope.file = file;
+              });
+            });
+        }
+
+        el.bind("change", function(e) {
+          var file = (e.srcElement || e.target).files[0];
+          getFile(file);
+        });
+      }
+    };
+  });
+
+angular.module('newsApp')
+  .directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
 angular.module("newsApp").directive('ngUserMenu', function() {
   return {
     restrict: 'A',
@@ -411,7 +483,60 @@ angular.module("newsApp").directive('ngAdminMenu', function() {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
+/***/ (function(module, exports) {
+
+angular.module('newsApp')
+.factory("fileReader", function($q, $log) {
+  var onLoad = function(reader, deferred, scope) {
+    return function() {
+      scope.$apply(function() {
+        deferred.resolve(reader.result);
+      });
+    };
+  };
+
+  var onError = function(reader, deferred, scope) {
+    return function() {
+      scope.$apply(function() {
+        deferred.reject(reader.result);
+      });
+    };
+  };
+
+  var onProgress = function(reader, scope) {
+    return function(event) {
+      scope.$broadcast("fileProgress", {
+        total: event.total,
+        loaded: event.loaded
+      });
+    };
+  };
+
+  var getReader = function(deferred, scope) {
+    var reader = new FileReader();
+    reader.onload = onLoad(reader, deferred, scope);
+    reader.onerror = onError(reader, deferred, scope);
+    reader.onprogress = onProgress(reader, scope);
+    return reader;
+  };
+
+  var readAsDataURL = function(file, scope) {
+    var deferred = $q.defer();
+
+    var reader = getReader(deferred, scope);
+    reader.readAsDataURL(file);
+
+    return deferred.promise;
+  };
+
+  return {
+    readAsDataUrl: readAsDataURL
+  };
+});
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('authService',  function($http){
@@ -452,7 +577,7 @@ angular.module("newsApp").service('authService',  function($http){
 });
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports) {
 
 angular.module("newsApp").service('dataService',  function($http){
@@ -489,11 +614,11 @@ angular.module("newsApp").service('dataService',  function($http){
 	}
 	
 	
+
+
 });
 
 /***/ }),
-/* 16 */,
-/* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
@@ -507,18 +632,8 @@ angular.module("newsApp").service('dataService',  function($http){
 /* 28 */,
 /* 29 */,
 /* 30 */,
-/* 31 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 31 */,
+/* 32 */,
 /* 33 */
 /***/ (function(module, exports) {
 
@@ -532,6 +647,18 @@ angular.module("newsApp").service('dataService',  function($http){
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -858,7 +985,7 @@ k=j[0],
 j[2]||j[4]||(k=(j[3]?"http://":"mailto:")+k),l=j.index,h(m.substr(0,l)),i(k,j[0].replace(d,"")),m=m.substring(l+j[0].length);return h(m),a(n.join(""))}}])}(window,window.angular);
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!function(a,b){ true?
@@ -2345,7 +2472,7 @@ null===b.buttontext&&delete b.buttontext,null===b.iconclass&&delete b.iconclass,
 g.addTool=function(a,b,c,e){g.tools[a]=angular.extend(g.$new(!0),d[a],k,{name:a}),g.tools[a].$element=j(d[a],g.tools[a]);var f;void 0===c&&(c=g.toolbar.length-1),f=angular.element(h.children()[c]),void 0===e?(f.append(g.tools[a].$element),g.toolbar[c][g.toolbar[c].length-1]=a):(f.children().eq(e).after(g.tools[a].$element),g.toolbar[c][e]=a)},b.registerToolbar(g),g.$on("$destroy",function(){b.unregisterToolbar(g.name)})}}}]),u.directive("textAngularVersion",["textAngularManager",function(a){var b=a.getVersion();return{restrict:"EA",link:function(a,c,d){c.html(b)}}}]),u.name});
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2357,26 +2484,31 @@ var angular = __webpack_require__(1);
 
 angular.module("newsApp",['textAngular','ngRoute']);
 
-//Controllers
+//Configuraciones
+__webpack_require__(6);
+
+//Controladores
 __webpack_require__(9);
 __webpack_require__(12);
 __webpack_require__(10);
 __webpack_require__(8);
 __webpack_require__(11);
 
-//Directives
+//Directivas
+__webpack_require__(14);
 __webpack_require__(13);
 
-//Services
-__webpack_require__(15);
-__webpack_require__(14);
-__webpack_require__(6);
+//Servicios
+__webpack_require__(17);
+__webpack_require__(16);
 
+//Provedores
+__webpack_require__(15);
 
 
 
 
 
 /***/ })
-],[37]);
+],[39]);
 //# sourceMappingURL=app.bundle.js.map

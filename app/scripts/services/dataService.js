@@ -32,4 +32,6 @@ angular.module("newsApp").service('dataService',  function($http){
 	}
 	
 	
+
+
 });

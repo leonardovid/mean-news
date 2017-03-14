@@ -92,6 +92,11 @@ body {
 	cursor:pointer;
 }
 
+.thumbnail img{
+	width: 350px;
+	height: 350px;
+}
+
 #news-view{
 	font-family: 'Playfair Display', serif;
 	width: 70%;
@@ -107,6 +112,10 @@ body {
 	font-size: 17px;
 }
 
+#backButton {
+
+	margin: 20px;
+}
 /*Panel*/
 
 .menu{
@@ -145,6 +154,11 @@ body {
 	margin-top: -100px; 
 	margin-left: -250px; 
 	z-index: 100;
+}
+
+#newsImg{
+	width: 600px;
+	height: 600px;
 }
 
 /*Footer*/

@@ -7,7 +7,8 @@ var newsSchema = new mongoose.Schema({
 	subtitle:String,
 	content:String,
 	author:String,
-	date:String,	
+	date:String,
+	img:String	
 });
 
 var newsModel = mongoose.model('News',newsSchema);
